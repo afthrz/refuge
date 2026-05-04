@@ -1,7 +1,34 @@
 {
   "permissions": {
     "allow": [
-      "Bash(npx create-next-app@latest . --typescript --tailwind --eslint --app --no-src-dir --no-import-alias --yes)"
+      "Bash(npx create-next-app@latest . --typescript --tailwind --eslint --app --no-src-dir --no-import-alias --yes)",
+      "WebFetch(domain:api.anthropic.com)",
+      "Bash(gunzip -c \"/Users/alfa/.claude/projects/-Users-alfa-coding-stuff-meditation--claude-worktrees-kind-mirzakhani-d864a0/00df8931-9373-4876-b481-07fa9787c803/tool-results/webfetch-1777824671474-n48tw3.bin\")",
+      "Bash(zcat \"/Users/alfa/.claude/projects/-Users-alfa-coding-stuff-meditation--claude-worktrees-kind-mirzakhani-d864a0/00df8931-9373-4876-b481-07fa9787c803/tool-results/webfetch-1777824671474-n48tw3.bin\")",
+      "Bash(node -e \"try { const {Cormorant_Garamond} = require\\('/Users/alfa/coding stuff/meditation/.claude/worktrees/kind-mirzakhani-d864a0/node_modules/next/font/google'\\); console.log\\('available'\\); } catch\\(e\\) { console.log\\(e.message\\); }\")",
+      "Bash(npx tsc *)",
+      "mcp__Claude_Preview__preview_start",
+      "Bash(xargs kill *)",
+      "Bash(npm run *)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3000)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" \"http://localhost:3000/player?course=slowing-down&day=1&title=Arriving\")",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" \"http://localhost:3000/audio/slowingdown-1.mov\")",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3000/signin)",
+      "Bash(npm install *)",
+      "Bash(grep -E \"\\\\.node$|darwin\")",
+      "Bash(npm rebuild *)",
+      "Bash(echo \" | signin: $\\(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3000/signin\\)\")",
+      "Bash(node -e \"require\\('lightningcss-darwin-arm64'\\)\")",
+      "Bash(node -e \"require\\('./node_modules/lightningcss-darwin-arm64'\\)\")",
+      "Bash(node -e \"require\\('./node_modules/lightningcss'\\)\")",
+      "Bash(rm -rf \"/Users/alfa/coding stuff/meditation/.claude/worktrees/kind-mirzakhani-d864a0/.next\")",
+      "Bash(curl -s -o /dev/null -w \"/ → %{http_code}\" http://localhost:3000)",
+      "Bash(echo \" | /signin → $\\(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3000/signin\\)\")",
+      "Bash(curl -s -o /dev/null -w '%{http_code}' http://localhost:3000__TRACKED_VAR__)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3000/)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3000/home)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3000/course/slowing-down)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3000/garden)"
     ]
   }
 }

@@ -122,8 +122,10 @@ export default function GardenPage() {
   const [selectedPlant, setSelectedPlant] = useState<string | null>(null);
 
   useEffect(() => {
-    setSessions(getSessions());
-    setLoaded(true);
+    getSessions().then((data) => {
+      setSessions(data);
+      setLoaded(true);
+    });
   }, []);
 
   const total = sessions.length;

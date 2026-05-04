@@ -26,8 +26,8 @@ function SessionTimer() {
   useEffect(() => {
     if (done && !savedRef.current) {
       savedRef.current = true;
-      saveSession(moodLabel, durationMin);
       playChime();
+      saveSession(moodLabel, durationMin);
     }
   }, [done, moodLabel, durationMin]);
 
@@ -58,9 +58,9 @@ function SessionTimer() {
   const progress = 1 - secondsLeft / totalSeconds;
   const elapsedMin = Math.round((totalSeconds - secondsLeft) / 60);
 
-  function handleEndEarly() {
+  async function handleEndEarly() {
     if (elapsedMin >= 1) {
-      saveSession(moodLabel, elapsedMin);
+      await saveSession(moodLabel, elapsedMin);
     }
     router.push("/");
   }

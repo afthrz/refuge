@@ -1,81 +1,158 @@
 @import "tailwindcss";
 
+/* ── Design tokens ── */
 :root {
-  --background: #0a100d;
-  --foreground: #e8dfc8;
-}
+  /* Surfaces */
+  --paper:       #f3ede2;
+  --paper-deep:  #ebe2d2;
+  --card:        #f7f1e6;
+  --card-edge:   rgba(107, 85, 68, 0.10);
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  /* Ink */
+  --ink:         #2c2a26;
+  --ink-soft:    #5a5147;
+  --ink-muted:   #8a8076;
+  --ink-faint:   #b3a89a;
+
+  /* Accents */
+  --sage:        #8a9b7a;
+  --sage-deep:   #6b7c5e;
+  --tan:         #d8c9ad;
+  --brown:       #6b5544;
+  --ember:       #a87858;
+
+  /* Audio/atmospheric */
+  --sunrise-1:   #e8c39a;
+  --sunrise-2:   #c9a487;
+  --sunrise-3:   #8a7560;
+  --sunrise-4:   #3d352c;
+
+  /* Typography */
+  --font-serif: 'Cormorant Garamond', 'EB Garamond', Georgia, serif;
+  --font-sans:  'Inter', -apple-system, system-ui, sans-serif;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: var(--font-geist-sans), Georgia, serif;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
 }
 
+/* ── Keyframes ── */
+
+@keyframes refuge-breath {
+  0%, 100% { transform: scale(1);   opacity: 0.7; }
+  50%       { transform: scale(1.4); opacity: 1;   }
+}
+
+@keyframes refuge-drift-0 {
+  0%, 100% { transform: translate(-50%, -50%) translate(0, 0); }
+  50%      { transform: translate(-50%, -50%) translate(40px, 30px); }
+}
+@keyframes refuge-drift-1 {
+  0%, 100% { transform: translate(-50%, -50%) translate(0, 0); }
+  50%      { transform: translate(-50%, -50%) translate(-30px, 20px); }
+}
+@keyframes refuge-drift-2 {
+  0%, 100% { transform: translate(-50%, -50%) translate(0, 0); }
+  50%      { transform: translate(-50%, -50%) translate(20px, -40px); }
+}
+
+@keyframes refuge-fade-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0);   }
+}
+
+@keyframes refuge-fade-in-slow {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes refuge-pulse-ring {
+  0%   { transform: scale(0.95); opacity: 0.6; }
+  70%  { transform: scale(1.4);  opacity: 0;   }
+  100% { transform: scale(1.4);  opacity: 0;   }
+}
+
+@keyframes refuge-sunrise-shift {
+  0%   { background-position: 0%   0%;   }
+  50%  { background-position: 100% 100%; }
+  100% { background-position: 0%   0%;   }
+}
+
+/* legacy animations kept for garden/session pages */
 @keyframes breathe {
   0%, 100% { opacity: 0.6; transform: scale(1); }
-  50% { opacity: 1; transform: scale(1.03); }
+  50%       { opacity: 1;   transform: scale(1.03); }
 }
-
 @keyframes mist {
-  0% { transform: translateX(-8px) translateY(4px); opacity: 0.3; }
-  50% { transform: translateX(8px) translateY(-4px); opacity: 0.5; }
-  100% { transform: translateX(-8px) translateY(4px); opacity: 0.3; }
+  0%   { transform: translateX(-8px) translateY(4px);  opacity: 0.3; }
+  50%  { transform: translateX(8px)  translateY(-4px); opacity: 0.5; }
+  100% { transform: translateX(-8px) translateY(4px);  opacity: 0.3; }
 }
-
 @keyframes flicker {
   0%, 100% { opacity: 0.85; }
-  25% { opacity: 0.92; }
-  50% { opacity: 0.78; }
-  75% { opacity: 0.95; }
+  25%       { opacity: 0.92; }
+  50%       { opacity: 0.78; }
+  75%       { opacity: 0.95; }
 }
-
 @keyframes rise {
   from { opacity: 0; transform: translateY(16px); }
-  to { opacity: 1; transform: translateY(0); }
+  to   { opacity: 1; transform: translateY(0);    }
 }
-
-.animate-breathe { animation: breathe 4s ease-in-out infinite; }
-.animate-mist { animation: mist 8s ease-in-out infinite; }
-.animate-flicker { animation: flicker 3s ease-in-out infinite; }
-.animate-rise { animation: rise 0.9s ease-out forwards; }
-.animate-rise-delay { animation: rise 0.9s ease-out 0.2s forwards; opacity: 0; }
-.animate-rise-delay-2 { animation: rise 0.9s ease-out 0.4s forwards; opacity: 0; }
-
 @keyframes inhale {
-  0% { transform: scale(1); opacity: 0.5; }
+  0%   { transform: scale(1);    opacity: 0.5; }
   100% { transform: scale(1.18); opacity: 0.9; }
 }
-
 @keyframes exhale {
-  0% { transform: scale(1.18); opacity: 0.9; }
-  100% { transform: scale(1); opacity: 0.5; }
+  0%   { transform: scale(1.18); opacity: 0.9; }
+  100% { transform: scale(1);    opacity: 0.5; }
 }
-
 @keyframes pulse-ring {
-  0% { transform: scale(1); opacity: 0.25; }
-  50% { transform: scale(1.28); opacity: 0; }
-  100% { transform: scale(1); opacity: 0; }
+  0%   { transform: scale(1);    opacity: 0.25; }
+  50%  { transform: scale(1.28); opacity: 0;    }
+  100% { transform: scale(1);    opacity: 0;    }
 }
-
 @keyframes fade-in {
   from { opacity: 0; }
-  to { opacity: 1; }
+  to   { opacity: 1; }
 }
-
 @keyframes sway {
-  0%, 100% { transform: translate(-50%, 100%) rotate(0deg); }
-  25% { transform: translate(-50%, 100%) rotate(1.5deg); }
-  75% { transform: translate(-50%, 100%) rotate(-1.5deg); }
+  0%, 100% { transform: translate(-50%, 100%) rotate(0deg);    }
+  25%       { transform: translate(-50%, 100%) rotate(1.5deg);  }
+  75%       { transform: translate(-50%, 100%) rotate(-1.5deg); }
 }
 
-.animate-inhale { animation: inhale 4s ease-in-out forwards; }
-.animate-exhale { animation: exhale 4s ease-in-out forwards; }
-.animate-pulse-ring { animation: pulse-ring 4s ease-out infinite; }
-.animate-fade-in { animation: fade-in 0.6s ease-out forwards; }
+/* ── Utility classes ── */
+
+.refuge-fade-in      { animation: refuge-fade-in      1200ms cubic-bezier(0.22, 1, 0.36, 1) both; }
+.refuge-fade-in-slow { animation: refuge-fade-in-slow 2200ms ease-out both; }
+
+/* link style */
+.refuge-link {
+  color: inherit;
+  text-decoration: none;
+  border-bottom: 1px solid currentColor;
+  padding-bottom: 1px;
+  opacity: 0.7;
+  transition: opacity 600ms ease;
+}
+.refuge-link:hover { opacity: 1; }
+
+/* scrollbar */
+::-webkit-scrollbar       { width: 8px; }
+::-webkit-scrollbar-thumb { background: rgba(107, 85, 68, 0.2); border-radius: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+
+/* legacy helpers */
+.animate-breathe        { animation: breathe      4s   ease-in-out infinite; }
+.animate-mist           { animation: mist         8s   ease-in-out infinite; }
+.animate-flicker        { animation: flicker      3s   ease-in-out infinite; }
+.animate-rise           { animation: rise         0.9s ease-out    forwards; }
+.animate-rise-delay     { animation: rise         0.9s ease-out    0.2s forwards; opacity: 0; }
+.animate-rise-delay-2   { animation: rise         0.9s ease-out    0.4s forwards; opacity: 0; }
+.animate-inhale         { animation: inhale       4s   ease-in-out forwards; }
+.animate-exhale         { animation: exhale       4s   ease-in-out forwards; }
+.animate-pulse-ring     { animation: pulse-ring   4s   ease-out    infinite; }
+.animate-fade-in        { animation: fade-in      0.6s ease-out    forwards; }

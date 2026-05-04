@@ -1,192 +1,325 @@
-import Link from "next/link";
+"use client";
 
-export default function LandingPage() {
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import RefugeWash from "@/app/components/RefugeWash";
+import { ARRIVAL_OPTIONS } from "@/app/lib/courses";
+
+type Phase = "intro" | "question" | "chosen";
+
+export default function ArrivalPage() {
+  const router = useRouter();
+  const [phase, setPhase] = useState<Phase>("intro");
+  const [chosen, setChosen] = useState<string | null>(null);
+  const [hovered, setHovered] = useState<string | null>(null);
+
+  useEffect(() => {
+    const t = setTimeout(() => setPhase("question"), 2200);
+    return () => clearTimeout(t);
+  }, []);
+
+  function handleChoose(option: (typeof ARRIVAL_OPTIONS)[0]) {
+    setChosen(option.id);
+    setPhase("chosen");
+    localStorage.setItem("refuge-arrival", JSON.stringify(option));
+    setTimeout(() => router.push("/home"), 1800);
+  }
+
+  function handleSkip() {
+    localStorage.removeItem("refuge-arrival");
+    router.push("/home");
+  }
+
   return (
-    <div className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden bg-[#070e09]">
+    <div
+      style={{
+        position: "relative",
+        minHeight: "100vh",
+        background: "var(--paper)",
+        fontFamily: "var(--font-sans)",
+        color: "var(--ink)",
+        overflow: "hidden",
+      }}
+    >
+      <RefugeWash variant="dawn" opacity={0.5} />
 
-      {/* Deep forest backdrop — layered radial gradients */}
+      {/* Top bar */}
       <div
-        className="absolute inset-0 pointer-events-none"
         style={{
-          background:
-            "radial-gradient(ellipse 80% 60% at 50% 110%, #1a3a22 0%, transparent 70%), " +
-            "radial-gradient(ellipse 120% 80% at 50% 100%, #0d1f12 0%, transparent 60%), " +
-            "radial-gradient(ellipse 60% 40% at 50% 50%, #0f1a10 0%, #070e09 100%)",
+          position: "absolute",
+          top: 32,
+          left: 48,
+          right: 48,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          zIndex: 2,
         }}
-      />
-
-      {/* Tall tree silhouettes — left */}
-      <div className="absolute inset-0 pointer-events-none overflow-hidden">
+      >
         <div
-          className="absolute bottom-0 left-0 w-[28%] h-[85%] opacity-70"
           style={{
-            background:
-              "linear-gradient(to top, #050c07 40%, transparent 100%)",
-            clipPath:
-              "polygon(0% 100%, 8% 60%, 5% 55%, 12% 30%, 9% 28%, 18% 10%, 22% 5%, 26% 10%, 22% 28%, 28% 30%, 24% 55%, 30% 60%, 28% 100%)",
+            display: "flex",
+            alignItems: "center",
+            gap: 10,
+            fontFamily: "var(--font-serif)",
+            fontStyle: "italic",
+            fontSize: 22,
+            letterSpacing: "0.02em",
           }}
-        />
-        <div
-          className="absolute bottom-0 left-[12%] w-[22%] h-[70%] opacity-60"
-          style={{
-            background:
-              "linear-gradient(to top, #050c07 40%, transparent 100%)",
-            clipPath:
-              "polygon(0% 100%, 10% 65%, 8% 60%, 16% 35%, 12% 30%, 22% 8%, 28% 3%, 32% 8%, 26% 30%, 34% 35%, 28% 60%, 32% 65%, 30% 100%)",
-          }}
-        />
-      </div>
-
-      {/* Tall tree silhouettes — right */}
-      <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        <div
-          className="absolute bottom-0 right-0 w-[28%] h-[80%] opacity-70"
-          style={{
-            background:
-              "linear-gradient(to top, #050c07 40%, transparent 100%)",
-            clipPath:
-              "polygon(72% 100%, 70% 60%, 76% 55%, 70% 28%, 78% 30%, 72% 5%, 78% 10%, 82% 28%, 78% 30%, 86% 55%, 80% 60%, 82% 100%, 100% 100%)",
-          }}
-        />
-        <div
-          className="absolute bottom-0 right-[10%] w-[22%] h-[65%] opacity-55"
-          style={{
-            background:
-              "linear-gradient(to top, #050c07 40%, transparent 100%)",
-            clipPath:
-              "polygon(68% 100%, 66% 65%, 72% 60%, 66% 30%, 74% 35%, 68% 8%, 74% 3%, 78% 8%, 72% 30%, 82% 35%, 74% 60%, 80% 65%, 100% 100%)",
-          }}
-        />
-      </div>
-
-      {/* Ground mist */}
-      <div
-        className="absolute bottom-0 left-0 right-0 h-40 pointer-events-none animate-mist"
-        style={{
-          background:
-            "radial-gradient(ellipse 100% 100% at 50% 100%, rgba(180,210,185,0.08) 0%, transparent 70%)",
-        }}
-      />
-      <div
-        className="absolute bottom-0 left-0 right-0 h-24 pointer-events-none"
-        style={{
-          background:
-            "linear-gradient(to top, rgba(140,185,150,0.06) 0%, transparent 100%)",
-          animationDelay: "3s",
-        }}
-      />
-
-      {/* Hut — central glowing structure */}
-      <div className="absolute bottom-[12%] left-1/2 -translate-x-1/2 flex flex-col items-center pointer-events-none">
-        {/* Roof */}
-        <div
-          className="w-0 h-0 opacity-80"
-          style={{
-            borderLeft: "54px solid transparent",
-            borderRight: "54px solid transparent",
-            borderBottom: "36px solid #1c2a1e",
-          }}
-        />
-        {/* Walls */}
-        <div className="relative w-[84px] h-[56px] bg-[#161f17] flex items-center justify-center">
-          {/* Window glow — the warm light inside */}
-          <div
-            className="w-[34px] h-[28px] rounded-sm animate-flicker"
-            style={{
-              background:
-                "radial-gradient(ellipse at 50% 40%, #f0c060 0%, #d4822a 50%, #8b4a1a 100%)",
-              boxShadow:
-                "0 0 18px 6px rgba(220,140,40,0.35), 0 0 40px 14px rgba(200,110,20,0.15)",
-            }}
-          />
-          {/* Door */}
-          <div
-            className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[18px] h-[24px] rounded-t-sm"
-            style={{ background: "#0d1510" }}
-          />
-        </div>
-        {/* Base / ground shadow */}
-        <div
-          className="w-[90px] h-[3px] rounded-full opacity-40"
-          style={{
-            background:
-              "radial-gradient(ellipse at 50% 50%, #2a4a30 0%, transparent 100%)",
-          }}
-        />
-        {/* Ambient glow on ground */}
-        <div
-          className="absolute -bottom-4 w-[160px] h-[40px] pointer-events-none"
-          style={{
-            background:
-              "radial-gradient(ellipse at 50% 50%, rgba(210,130,30,0.12) 0%, transparent 70%)",
-          }}
-        />
-      </div>
-
-      {/* Stars */}
-      {[
-        { top: "8%", left: "15%", size: 1.5, delay: "0s" },
-        { top: "12%", left: "72%", size: 1, delay: "1s" },
-        { top: "5%", left: "45%", size: 2, delay: "2s" },
-        { top: "18%", left: "88%", size: 1, delay: "0.5s" },
-        { top: "22%", left: "30%", size: 1.5, delay: "1.5s" },
-        { top: "9%", left: "58%", size: 1, delay: "2.5s" },
-        { top: "6%", left: "82%", size: 1.5, delay: "0.8s" },
-        { top: "15%", left: "10%", size: 1, delay: "3s" },
-      ].map((star, i) => (
-        <div
-          key={i}
-          className="absolute rounded-full animate-breathe"
-          style={{
-            top: star.top,
-            left: star.left,
-            width: `${star.size * 2}px`,
-            height: `${star.size * 2}px`,
-            background: "rgba(220,210,190,0.8)",
-            animationDelay: star.delay,
-            boxShadow: `0 0 ${star.size * 3}px rgba(220,210,190,0.4)`,
-          }}
-        />
-      ))}
-
-      {/* Text and CTA — centered above the hut */}
-      <div className="relative z-10 flex flex-col items-center gap-6 text-center px-6 mb-[22vh]">
-        <p className="animate-rise text-[11px] tracking-[0.35em] uppercase text-[#7a9e80] font-light">
-          a guided meditation
-        </p>
-        <h1
-          className="animate-rise-delay text-5xl sm:text-6xl font-light tracking-widest text-[#ddd5bb]"
-          style={{ textShadow: "0 0 40px rgba(200,180,120,0.2)" }}
         >
-          Refuge
-        </h1>
-        <p className="animate-rise-delay text-base text-[#6b8a70] font-light tracking-wide max-w-[240px] leading-relaxed">
-          Step inside. Leave the noise behind.
-        </p>
-
-        <div className="animate-rise-delay-2 mt-4">
-          <Link
-            href="/meditate"
-            className="group relative inline-flex items-center gap-3 px-8 py-3 rounded-full border border-[#3a5a3f] text-[#b5c9b8] text-sm tracking-widest uppercase font-light transition-all duration-500 hover:border-[#8aae8f] hover:text-[#d4e6d6] hover:shadow-[0_0_24px_rgba(100,160,100,0.15)]"
-          >
-            <span
-              className="w-1.5 h-1.5 rounded-full bg-[#c8903a] animate-flicker"
-              style={{ boxShadow: "0 0 6px rgba(200,140,50,0.6)" }}
-            />
-            Enter
-          </Link>
+          <BreathDot />
+          <span>Refuge</span>
         </div>
+        <button
+          onClick={handleSkip}
+          style={{
+            background: "transparent",
+            border: "none",
+            cursor: "pointer",
+            color: "var(--ink-muted)",
+            fontFamily: "var(--font-sans)",
+            fontSize: 12,
+            letterSpacing: "0.08em",
+            textTransform: "uppercase",
+          }}
+        >
+          Browse the courses
+        </button>
+      </div>
 
-        {/* Garden link — subtle, beneath the main CTA */}
-        <div className="animate-rise-delay-2 mt-2">
-          <Link
-            href="/garden"
-            className="text-[11px] tracking-[0.3em] uppercase text-[#3a5a3f] font-light hover:text-[#6a9a70] transition-colors"
-          >
-            your garden →
-          </Link>
+      {/* Center stage */}
+      <div
+        style={{
+          position: "relative",
+          zIndex: 1,
+          minHeight: "100vh",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          padding: "120px 48px 80px",
+        }}
+      >
+        <div style={{ maxWidth: 720, width: "100%", textAlign: "center" }}>
+
+          {phase === "intro" && (
+            <div className="refuge-fade-in-slow">
+              <div
+                style={{
+                  fontFamily: "var(--font-serif)",
+                  fontSize: 28,
+                  fontStyle: "italic",
+                  color: "var(--ink-soft)",
+                  lineHeight: 1.5,
+                  fontWeight: 400,
+                }}
+              >
+                Welcome.
+              </div>
+              <div
+                style={{
+                  marginTop: 16,
+                  color: "var(--ink-muted)",
+                  fontSize: 14,
+                  letterSpacing: "0.04em",
+                }}
+              >
+                Take a breath before we begin.
+              </div>
+            </div>
+          )}
+
+          {(phase === "question" || phase === "chosen") && (
+            <div className="refuge-fade-in">
+              <div
+                style={{
+                  fontFamily: "var(--font-sans)",
+                  fontSize: 11,
+                  letterSpacing: "0.24em",
+                  textTransform: "uppercase",
+                  color: "var(--ink-muted)",
+                  marginBottom: 24,
+                }}
+              >
+                The Arrival
+              </div>
+
+              <h1
+                style={{
+                  fontFamily: "var(--font-serif)",
+                  fontSize: "clamp(36px, 5.2vw, 56px)",
+                  fontWeight: 400,
+                  lineHeight: 1.15,
+                  margin: 0,
+                  color: "var(--ink)",
+                  letterSpacing: "-0.01em",
+                }}
+              >
+                How are you{" "}
+                <em style={{ fontStyle: "italic", color: "var(--sage)" }}>arriving</em>{" "}
+                today?
+              </h1>
+
+              <div
+                style={{
+                  marginTop: 18,
+                  marginBottom: 56,
+                  color: "var(--ink-soft)",
+                  fontSize: 15,
+                  lineHeight: 1.7,
+                  fontFamily: "var(--font-serif)",
+                  fontStyle: "italic",
+                  maxWidth: 480,
+                  marginLeft: "auto",
+                  marginRight: "auto",
+                }}
+              >
+                There are no wrong answers. Choose what feels closest to true.
+              </div>
+
+              {/* Three doors */}
+              <div
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: "repeat(3, 1fr)",
+                  gap: 16,
+                  maxWidth: 880,
+                  margin: "0 auto",
+                }}
+              >
+                {ARRIVAL_OPTIONS.map((option) => {
+                  const isHovered = hovered === option.id;
+                  const isChosen = chosen === option.id;
+                  const isFaded = chosen !== null && !isChosen;
+                  return (
+                    <button
+                      key={option.id}
+                      onMouseEnter={() => setHovered(option.id)}
+                      onMouseLeave={() => setHovered(null)}
+                      onClick={() => handleChoose(option)}
+                      disabled={chosen !== null}
+                      style={{
+                        position: "relative",
+                        padding: "40px 24px 36px",
+                        background:
+                          isHovered || isChosen
+                            ? "var(--card)"
+                            : "rgba(247, 241, 230, 0.4)",
+                        border: `1px solid ${isHovered || isChosen ? "var(--sage)" : "var(--card-edge)"}`,
+                        borderRadius: 2,
+                        cursor: chosen !== null ? "default" : "pointer",
+                        textAlign: "center",
+                        fontFamily: "inherit",
+                        color: "inherit",
+                        opacity: isFaded ? 0.3 : 1,
+                        transform:
+                          isHovered && chosen === null
+                            ? "translateY(-2px)"
+                            : "translateY(0)",
+                        transition: "all 900ms cubic-bezier(0.22, 1, 0.36, 1)",
+                        backdropFilter: "blur(4px)",
+                      }}
+                    >
+                      <div
+                        style={{
+                          width: 32,
+                          height: 32,
+                          margin: "0 auto 24px",
+                          borderRadius: "50%",
+                          border: "1px solid var(--sage)",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          background: isChosen ? "var(--sage)" : "transparent",
+                          transition: "background 600ms ease",
+                        }}
+                      >
+                        <div
+                          style={{
+                            width: 6,
+                            height: 6,
+                            borderRadius: "50%",
+                            background: isChosen ? "var(--paper)" : "var(--sage)",
+                          }}
+                        />
+                      </div>
+                      <div
+                        style={{
+                          fontFamily: "var(--font-serif)",
+                          fontSize: 22,
+                          fontWeight: 400,
+                          lineHeight: 1.3,
+                          color: "var(--ink)",
+                          marginBottom: 12,
+                        }}
+                      >
+                        {option.label}
+                      </div>
+                      <div
+                        style={{
+                          fontSize: 13,
+                          lineHeight: 1.6,
+                          color: "var(--ink-muted)",
+                          maxWidth: 200,
+                          margin: "0 auto",
+                        }}
+                      >
+                        {option.sub}
+                      </div>
+                    </button>
+                  );
+                })}
+              </div>
+
+              {phase === "chosen" && (
+                <div
+                  style={{
+                    marginTop: 56,
+                    fontFamily: "var(--font-serif)",
+                    fontStyle: "italic",
+                    fontSize: 18,
+                    color: "var(--ink-soft)",
+                    animation: "refuge-fade-in 1200ms ease both",
+                  }}
+                >
+                  Thank you. Let us begin.
+                </div>
+              )}
+            </div>
+          )}
         </div>
+      </div>
+
+      {/* Bottom tagline */}
+      <div
+        style={{
+          position: "absolute",
+          bottom: 32,
+          left: 0,
+          right: 0,
+          textAlign: "center",
+          zIndex: 2,
+          fontSize: 10,
+          letterSpacing: "0.32em",
+          textTransform: "uppercase",
+          color: "var(--ink-faint)",
+        }}
+      >
+        a quiet place to come back to
       </div>
     </div>
+  );
+}
+
+function BreathDot() {
+  return (
+    <div
+      style={{
+        width: 8,
+        height: 8,
+        borderRadius: "50%",
+        background: "var(--sage)",
+        animation: "refuge-breath 4s ease-in-out infinite",
+      }}
+    />
   );
 }
