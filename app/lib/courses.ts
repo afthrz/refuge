@@ -34,7 +34,7 @@ export const COURSES: Course[] = [
     teacher: "Voiced by Maren",
     episodes: {
       1: "/audio/slowingdown-1.mov",
-      // 2: "/audio/slowingdown-2.mov",  ← add each new episode here
+      2: "/audio/slowingdown-2.mov",
     },
   },
   {
