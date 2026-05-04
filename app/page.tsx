@@ -32,9 +32,10 @@ export default function ArrivalPage() {
 
   return (
     <div
+      className="arrival-page"
       style={{
         position: "relative",
-        minHeight: "100vh",
+        minHeight: "100svh",
         background: "var(--paper)",
         fontFamily: "var(--font-sans)",
         color: "var(--ink)",
@@ -45,6 +46,7 @@ export default function ArrivalPage() {
 
       {/* Top bar */}
       <div
+        className="arrival-topbar"
         style={{
           position: "absolute",
           top: 32,
@@ -89,21 +91,23 @@ export default function ArrivalPage() {
 
       {/* Center stage */}
       <div
+        className="arrival-stage"
         style={{
           position: "relative",
           zIndex: 1,
-          minHeight: "100vh",
+          minHeight: "100svh",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
           padding: "120px 48px 80px",
         }}
       >
-        <div style={{ maxWidth: 720, width: "100%", textAlign: "center" }}>
+        <div className="arrival-shell" style={{ maxWidth: 920, width: "100%", textAlign: "center" }}>
 
           {phase === "intro" && (
             <div className="refuge-fade-in-slow">
               <div
+                className="arrival-kicker"
                 style={{
                   fontFamily: "var(--font-serif)",
                   fontSize: 28,
@@ -144,14 +148,15 @@ export default function ArrivalPage() {
               </div>
 
               <h1
+                className="arrival-title"
                 style={{
                   fontFamily: "var(--font-serif)",
-                  fontSize: "clamp(36px, 5.2vw, 56px)",
+                  fontSize: 56,
                   fontWeight: 400,
                   lineHeight: 1.15,
                   margin: 0,
                   color: "var(--ink)",
-                  letterSpacing: "-0.01em",
+                  letterSpacing: 0,
                 }}
               >
                 How are you{" "}
@@ -160,6 +165,7 @@ export default function ArrivalPage() {
               </h1>
 
               <div
+                className="arrival-subtitle"
                 style={{
                   marginTop: 18,
                   marginBottom: 56,
@@ -178,6 +184,7 @@ export default function ArrivalPage() {
 
               {/* Three doors */}
               <div
+                className="arrival-options"
                 style={{
                   display: "grid",
                   gridTemplateColumns: "repeat(3, 1fr)",
@@ -193,6 +200,7 @@ export default function ArrivalPage() {
                   return (
                     <button
                       key={option.id}
+                      className="arrival-option-card"
                       onMouseEnter={() => setHovered(option.id)}
                       onMouseLeave={() => setHovered(null)}
                       onClick={() => handleChoose(option)}
@@ -220,6 +228,7 @@ export default function ArrivalPage() {
                       }}
                     >
                       <div
+                        className="arrival-option-mark"
                         style={{
                           width: 32,
                           height: 32,
@@ -243,6 +252,7 @@ export default function ArrivalPage() {
                         />
                       </div>
                       <div
+                        className="arrival-option-label"
                         style={{
                           fontFamily: "var(--font-serif)",
                           fontSize: 22,
@@ -255,6 +265,7 @@ export default function ArrivalPage() {
                         {option.label}
                       </div>
                       <div
+                        className="arrival-option-copy"
                         style={{
                           fontSize: 13,
                           lineHeight: 1.6,
@@ -291,6 +302,7 @@ export default function ArrivalPage() {
 
       {/* Bottom tagline */}
       <div
+        className="arrival-bottom-tagline"
         style={{
           position: "absolute",
           bottom: 32,

@@ -1,9 +1,16 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
   title: "Refuge",
   description: "A quiet place to come back to, in a world that won't let you stop.",
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  themeColor: "#07100b",
+  colorScheme: "dark",
 };
 
 export default function RootLayout({

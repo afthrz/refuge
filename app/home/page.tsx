@@ -26,9 +26,10 @@ export default function HomePage() {
 
   return (
     <div
+      className="home-page"
       style={{
         position: "relative",
-        minHeight: "100vh",
+        minHeight: "100svh",
         background: "var(--paper)",
         fontFamily: "var(--font-sans)",
         color: "var(--ink)",
@@ -38,6 +39,7 @@ export default function HomePage() {
 
       {/* Header */}
       <header
+        className="home-header"
         style={{
           position: "relative",
           zIndex: 2,
@@ -62,6 +64,7 @@ export default function HomePage() {
           <span>Refuge</span>
         </div>
         <nav
+          className="home-nav"
           style={{
             display: "flex",
             alignItems: "center",
@@ -83,6 +86,7 @@ export default function HomePage() {
 
       {/* Hero */}
       <section
+        className="home-hero"
         style={{
           position: "relative",
           zIndex: 1,
@@ -123,7 +127,7 @@ export default function HomePage() {
             lineHeight: 1.05,
             margin: 0,
             color: "#f3e7cf",
-            letterSpacing: "-0.02em",
+            letterSpacing: 0,
             maxWidth: 900,
             textShadow: "0 0 46px rgba(197, 166, 108, 0.18)",
           }}
@@ -193,6 +197,7 @@ export default function HomePage() {
 
       {/* Course library */}
       <section
+        className="home-library"
         style={{
           position: "relative",
           zIndex: 1,
@@ -202,6 +207,7 @@ export default function HomePage() {
         }}
       >
         <div
+          className="home-library-head"
           style={{
             display: "flex",
             alignItems: "baseline",
@@ -271,6 +277,7 @@ export default function HomePage() {
 
       {/* Footer */}
       <footer
+        className="home-footer"
         style={{
           position: "relative",
           zIndex: 1,
@@ -331,6 +338,7 @@ function CourseRow({
 }) {
   return (
     <div
+      className="course-row"
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
       onClick={onClick}
@@ -348,6 +356,7 @@ function CourseRow({
     >
       {/* Number */}
       <div
+        className="course-row-thumb"
         style={{
           fontFamily: "var(--font-serif)",
           fontSize: 14,
@@ -408,6 +417,7 @@ function CourseRow({
           {course.subtitle}
         </div>
         <h3
+          className="course-row-title"
           style={{
             fontFamily: "var(--font-serif)",
             fontSize: 36,
@@ -415,7 +425,7 @@ function CourseRow({
             margin: 0,
             color: "var(--ink)",
             lineHeight: 1.05,
-            letterSpacing: "-0.01em",
+            letterSpacing: 0,
           }}
         >
           {course.title}
@@ -436,6 +446,7 @@ function CourseRow({
 
       {/* Meta */}
       <div
+        className="course-row-meta"
         style={{
           display: "flex",
           flexDirection: "column",
