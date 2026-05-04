@@ -33,7 +33,6 @@ function SessionTimer() {
 
   useEffect(() => {
     if (paused || done) return;
-    if (secondsLeft <= 0) { setDone(true); return; }
     const id = setInterval(() => {
       setSecondsLeft((s) => {
         if (s <= 1) { setDone(true); return 0; }

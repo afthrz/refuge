@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import AccountNav from "@/app/components/AccountNav";
 import { getSessions, getTotalMinutes, getCurrentStreak, type Session } from "@/app/lib/sessions";
 
 const MOOD_PALETTE: Record<string, { petal: string; glow: string; center: string }> = {
@@ -187,6 +188,7 @@ export default function GardenPage() {
         >
           ← the forest
         </Link>
+        <AccountNav />
       </div>
 
       {/* Title + stats */}

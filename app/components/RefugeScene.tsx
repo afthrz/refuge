@@ -13,35 +13,35 @@ type SceneDef = { bg: string; shapes: Shape[] };
 
 const SCENES: Record<SceneKind, SceneDef> = {
   slowing: {
-    bg: "linear-gradient(180deg, #e8c39a 0%, #c9a487 45%, #6b5544 100%)",
+    bg: "linear-gradient(180deg, #d6a45f 0%, #54774a 46%, #09120d 100%)",
     shapes: [
       { type: "beam", x: 25, w: 8, opacity: 0.35 },
       { type: "beam", x: 55, w: 5, opacity: 0.25 },
       { type: "beam", x: 75, w: 10, opacity: 0.30 },
-      { type: "trunk", x: 18, color: "#3d352c" },
-      { type: "trunk", x: 48, color: "#3d352c" },
-      { type: "trunk", x: 82, color: "#3d352c" },
+      { type: "trunk", x: 18, color: "#07100b" },
+      { type: "trunk", x: 48, color: "#07100b" },
+      { type: "trunk", x: 82, color: "#07100b" },
     ],
   },
   "letting-go": {
-    bg: "linear-gradient(180deg, #e8c39a 0%, #d8c9ad 55%, #8a9b7a 100%)",
+    bg: "linear-gradient(180deg, #c5a66c 0%, #54774a 55%, #0d1711 100%)",
     shapes: [
-      { type: "hill", y: 60, color: "#6b7c5e", opacity: 0.5 },
-      { type: "hill", y: 70, color: "#6b5544", opacity: 0.6 },
-      { type: "hill", y: 82, color: "#3d352c", opacity: 0.85 },
+      { type: "hill", y: 60, color: "#54774a", opacity: 0.5 },
+      { type: "hill", y: 70, color: "#263324", opacity: 0.72 },
+      { type: "hill", y: 82, color: "#07100b", opacity: 0.9 },
     ],
   },
   returning: {
-    bg: "linear-gradient(180deg, #d8c9ad 0%, #8a9b7a 50%, #6b5544 100%)",
+    bg: "linear-gradient(180deg, #54774a 0%, #263324 48%, #07100b 100%)",
     shapes: [
-      { type: "horizon", y: 50, color: "#3d352c", opacity: 0.7 },
+      { type: "horizon", y: 50, color: "#c5a66c", opacity: 0.45 },
       { type: "ripple", y: 65 },
       { type: "ripple", y: 75 },
       { type: "ripple", y: 85 },
     ],
   },
   "quiet-mind": {
-    bg: "linear-gradient(180deg, #f3ede2 0%, #d8c9ad 60%, #6b7c5e 100%)",
+    bg: "linear-gradient(180deg, #152219 0%, #263324 56%, #07100b 100%)",
     shapes: [
       { type: "mist", y: 35, opacity: 0.6 },
       { type: "mist", y: 55, opacity: 0.4 },
@@ -49,14 +49,14 @@ const SCENES: Record<SceneKind, SceneDef> = {
     ],
   },
   sleep: {
-    bg: "linear-gradient(180deg, #6b5544 0%, #3d352c 55%, #1a1714 100%)",
+    bg: "linear-gradient(180deg, #1b231b 0%, #10140f 55%, #050604 100%)",
     shapes: [
       { type: "moon", x: 78, y: 25 },
       { type: "mist", y: 70, opacity: 0.3 },
     ],
   },
   forest: {
-    bg: "linear-gradient(180deg, #8a9b7a 0%, #6b5544 100%)",
+    bg: "linear-gradient(180deg, #54774a 0%, #07100b 100%)",
     shapes: [],
   },
 };

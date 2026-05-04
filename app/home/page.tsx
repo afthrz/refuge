@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import AccountNav from "@/app/components/AccountNav";
 import RefugeWash from "@/app/components/RefugeWash";
 import RefugeScene from "@/app/components/RefugeScene";
 import { COURSES, type Course, type ArrivalOption } from "@/app/lib/courses";
@@ -13,10 +14,14 @@ export default function HomePage() {
   const [arrival, setArrival] = useState<ArrivalOption | null>(null);
 
   useEffect(() => {
-    try {
-      const raw = localStorage.getItem("refuge-arrival");
-      if (raw) setArrival(JSON.parse(raw));
-    } catch {}
+    const id = window.setTimeout(() => {
+      try {
+        const raw = localStorage.getItem("refuge-arrival");
+        if (raw) setArrival(JSON.parse(raw));
+      } catch {}
+    }, 0);
+
+    return () => window.clearTimeout(id);
   }, []);
 
   return (
@@ -72,9 +77,7 @@ export default function HomePage() {
           <Link href="/garden" className="refuge-link" style={{ borderColor: "transparent" }}>
             Garden
           </Link>
-          <Link href="/signin" className="refuge-link" style={{ borderColor: "transparent", color: "var(--ink)" }}>
-            Sign in
-          </Link>
+          <AccountNav />
         </nav>
       </header>
 
@@ -119,9 +122,10 @@ export default function HomePage() {
             fontWeight: 400,
             lineHeight: 1.05,
             margin: 0,
-            color: "var(--ink)",
+            color: "#f3e7cf",
             letterSpacing: "-0.02em",
             maxWidth: 900,
+            textShadow: "0 0 46px rgba(197, 166, 108, 0.18)",
           }}
         >
           A quiet place to come back to,
@@ -129,7 +133,7 @@ export default function HomePage() {
           <em
             style={{
               fontStyle: "italic",
-              color: "var(--ink-soft)",
+              color: "#b9c3a6",
               fontWeight: 400,
             }}
           >

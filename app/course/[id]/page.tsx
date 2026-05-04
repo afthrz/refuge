@@ -3,9 +3,10 @@
 import { useState, useEffect, use } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import AccountNav from "@/app/components/AccountNav";
 import RefugeScene from "@/app/components/RefugeScene";
 import { getCourse, COURSE_DAYS } from "@/app/lib/courses";
-import { createClient } from "@/app/lib/supabase";
+import { createClient, hasSupabaseConfig } from "@/app/lib/supabase";
 
 function PlayGlyph({ color }: { color: string }) {
   return (
@@ -38,6 +39,8 @@ export default function CoursePage({
   const [signedIn, setSignedIn] = useState(false);
 
   useEffect(() => {
+    if (!hasSupabaseConfig()) return;
+
     const supabase = createClient();
     supabase.auth.getUser().then(({ data: { user } }) => {
       setSignedIn(!!user);
@@ -125,23 +128,32 @@ export default function CoursePage({
             style={{
               display: "flex",
               alignItems: "center",
-              gap: 10,
+              gap: 18,
               color: "#f3ede2",
               fontFamily: "var(--font-serif)",
               fontStyle: "italic",
               fontSize: 20,
             }}
           >
-            <div
+            <span
               style={{
-                width: 8,
-                height: 8,
-                borderRadius: "50%",
-                background: "#f3ede2",
-                animation: "refuge-breath 4s ease-in-out infinite",
+                display: "inline-flex",
+                alignItems: "center",
+                gap: 10,
               }}
-            />
-            Refuge
+            >
+              <div
+                style={{
+                  width: 8,
+                  height: 8,
+                  borderRadius: "50%",
+                  background: "#f3ede2",
+                  animation: "refuge-breath 4s ease-in-out infinite",
+                }}
+              />
+              Refuge
+            </span>
+            <AccountNav />
           </div>
         </div>
       </div>

@@ -210,7 +210,6 @@ function PlayerInner() {
           teacher={course?.teacher ?? ""}
           elapsed={elapsed}
           remaining={remaining}
-          totalSeconds={totalSeconds}
           progress={progress}
           playing={playing}
           onTogglePlay={() => setPlaying((p) => !p)}
@@ -241,7 +240,6 @@ function PlayerStage({
   teacher,
   elapsed,
   remaining,
-  totalSeconds,
   progress,
   playing,
   onTogglePlay,
@@ -252,7 +250,6 @@ function PlayerStage({
   teacher: string;
   elapsed: number;
   remaining: number;
-  totalSeconds: number;
   progress: number;
   playing: boolean;
   onTogglePlay: () => void;

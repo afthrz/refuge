@@ -3,29 +3,29 @@
 /* ── Design tokens ── */
 :root {
   /* Surfaces */
-  --paper:       #f3ede2;
-  --paper-deep:  #ebe2d2;
-  --card:        #f7f1e6;
-  --card-edge:   rgba(107, 85, 68, 0.10);
+  --paper:       #07100b;
+  --paper-deep:  #0d1711;
+  --card:        #101c15;
+  --card-edge:   rgba(197, 166, 108, 0.18);
 
   /* Ink */
-  --ink:         #2c2a26;
-  --ink-soft:    #5a5147;
-  --ink-muted:   #8a8076;
-  --ink-faint:   #b3a89a;
+  --ink:         #f3e7cf;
+  --ink-soft:    #b9c3a6;
+  --ink-muted:   #91ad91;
+  --ink-faint:   #5f745c;
 
   /* Accents */
-  --sage:        #8a9b7a;
-  --sage-deep:   #6b7c5e;
-  --tan:         #d8c9ad;
-  --brown:       #6b5544;
-  --ember:       #a87858;
+  --sage:        #9fbd87;
+  --sage-deep:   #54774a;
+  --tan:         #c5a66c;
+  --brown:       #2b2118;
+  --ember:       #d09656;
 
   /* Audio/atmospheric */
-  --sunrise-1:   #e8c39a;
-  --sunrise-2:   #c9a487;
-  --sunrise-3:   #8a7560;
-  --sunrise-4:   #3d352c;
+  --sunrise-1:   #d6a45f;
+  --sunrise-2:   #8c6238;
+  --sunrise-3:   #263324;
+  --sunrise-4:   #080907;
 
   /* Typography */
   --font-serif: 'Cormorant Garamond', 'EB Garamond', Georgia, serif;
@@ -142,7 +142,7 @@ body {
 
 /* scrollbar */
 ::-webkit-scrollbar       { width: 8px; }
-::-webkit-scrollbar-thumb { background: rgba(107, 85, 68, 0.2); border-radius: 4px; }
+::-webkit-scrollbar-thumb { background: rgba(197, 166, 108, 0.24); border-radius: 4px; }
 ::-webkit-scrollbar-track { background: transparent; }
 
 /* legacy helpers */

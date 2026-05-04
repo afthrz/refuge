@@ -1,39 +1,91 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { FormEvent, Suspense, useEffect, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import RefugeWash from "@/app/components/RefugeWash";
-import { createClient } from "@/app/lib/supabase";
+import { createClient, hasSupabaseConfig } from "@/app/lib/supabase";
 
-export default function SignInPage() {
+function getErrorMessage(code: string | null) {
+  if (code === "auth_config") {
+    return "Supabase is not configured yet. Add the public URL and anon key.";
+  }
+
+  if (code === "auth_failed") {
+    return "The sign-in link could not be confirmed. Please try again.";
+  }
+
+  return null;
+}
+
+function SignInContent() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const queryErrorMsg = getErrorMessage(searchParams.get("error"));
   const [email, setEmail] = useState("");
   const [sent, setSent] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [oauthLoading, setOauthLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
+  const shownErrorMsg = errorMsg ?? queryErrorMsg;
 
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
+  useEffect(() => {
+    if (!hasSupabaseConfig()) return;
+
+    const supabase = createClient();
+    supabase.auth.getUser().then(({ data }) => {
+      if (data.user) router.replace("/home");
+    });
+  }, [router]);
+
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
     if (!email.includes("@")) return;
     setLoading(true);
     setErrorMsg(null);
 
-    const supabase = createClient();
-    const { error } = await supabase.auth.signInWithOtp({
-      email,
-      options: {
-        emailRedirectTo: `${window.location.origin}/auth/callback`,
-      },
-    });
+    try {
+      const supabase = createClient();
+      const { error } = await supabase.auth.signInWithOtp({
+        email,
+        options: {
+          emailRedirectTo: `${window.location.origin}/auth/callback`,
+        },
+      });
 
-    setLoading(false);
+      if (error) {
+        setErrorMsg(error.message);
+        return;
+      }
 
-    if (error) {
-      setErrorMsg(error.message);
-      return;
+      setSent(true);
+    } catch (error) {
+      setErrorMsg(error instanceof Error ? error.message : "Sign-in failed.");
+    } finally {
+      setLoading(false);
     }
+  }
 
-    setSent(true);
+  async function handleGoogleSignIn() {
+    setOauthLoading(true);
+    setErrorMsg(null);
+
+    try {
+      const supabase = createClient();
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: "google",
+        options: {
+          redirectTo: `${window.location.origin}/auth/callback`,
+        },
+      });
+
+      if (error) {
+        setErrorMsg(error.message);
+        setOauthLoading(false);
+      }
+    } catch (error) {
+      setErrorMsg(error instanceof Error ? error.message : "Google sign-in failed.");
+      setOauthLoading(false);
+    }
   }
 
   return (
@@ -47,9 +99,8 @@ export default function SignInPage() {
         overflow: "hidden",
       }}
     >
-      <RefugeWash variant="forest" opacity={0.4} />
+      <RefugeWash variant="forest" opacity={0.34} />
 
-      {/* Top bar */}
       <div
         style={{
           position: "absolute",
@@ -80,6 +131,7 @@ export default function SignInPage() {
               borderRadius: "50%",
               background: "var(--sage)",
               animation: "refuge-breath 4s ease-in-out infinite",
+              boxShadow: "0 0 18px rgba(159,189,135,0.35)",
             }}
           />
           <span>Refuge</span>
@@ -97,11 +149,10 @@ export default function SignInPage() {
             textTransform: "uppercase",
           }}
         >
-          ← Back
+          Back
         </button>
       </div>
 
-      {/* Center */}
       <div
         style={{
           position: "relative",
@@ -113,7 +164,18 @@ export default function SignInPage() {
           padding: "120px 48px 80px",
         }}
       >
-        <div style={{ maxWidth: 480, width: "100%", textAlign: "center" }}>
+        <div
+          style={{
+            maxWidth: 500,
+            width: "100%",
+            textAlign: "center",
+            padding: "34px 28px",
+            border: "1px solid var(--card-edge)",
+            background: "rgba(13, 23, 17, 0.72)",
+            boxShadow: "0 24px 90px rgba(0,0,0,0.28)",
+            backdropFilter: "blur(10px)",
+          }}
+        >
           {!sent ? (
             <div className="refuge-fade-in">
               <div
@@ -122,7 +184,7 @@ export default function SignInPage() {
                   letterSpacing: "0.32em",
                   textTransform: "uppercase",
                   color: "var(--ink-muted)",
-                  marginBottom: 32,
+                  marginBottom: 28,
                 }}
               >
                 Sign in
@@ -148,15 +210,91 @@ export default function SignInPage() {
                   fontSize: 17,
                   color: "var(--ink-soft)",
                   lineHeight: 1.7,
-                  maxWidth: 380,
+                  maxWidth: 390,
                   margin: "20px auto 0",
                 }}
               >
-                We will send you a single quiet link. No password to remember.
+                Continue with Google, or receive a single quiet link by email.
                 If you are new, this also creates your account.
               </p>
 
-              <form onSubmit={handleSubmit} style={{ marginTop: 56 }}>
+              {shownErrorMsg && (
+                <div
+                  style={{
+                    margin: "26px auto 0",
+                    maxWidth: 420,
+                    padding: "12px 14px",
+                    background: "rgba(208, 150, 86, 0.1)",
+                    border: "1px solid rgba(208, 150, 86, 0.28)",
+                    borderRadius: 8,
+                    color: "#f0c08a",
+                    fontSize: 13,
+                    lineHeight: 1.6,
+                  }}
+                >
+                  {shownErrorMsg}
+                </div>
+              )}
+
+              <button
+                type="button"
+                onClick={handleGoogleSignIn}
+                disabled={oauthLoading || loading}
+                style={{
+                  width: "100%",
+                  marginTop: 44,
+                  padding: "15px 24px",
+                  background: "#efe9dc",
+                  color: "#182319",
+                  border: "1px solid rgba(255,255,255,0.28)",
+                  borderRadius: 999,
+                  fontFamily: "var(--font-sans)",
+                  fontSize: 13,
+                  letterSpacing: "0.1em",
+                  textTransform: "uppercase",
+                  cursor: oauthLoading || loading ? "default" : "pointer",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: 12,
+                  opacity: oauthLoading || loading ? 0.65 : 1,
+                }}
+              >
+                <span
+                  style={{
+                    width: 22,
+                    height: 22,
+                    borderRadius: "50%",
+                    background: "white",
+                    display: "inline-flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    fontWeight: 600,
+                  }}
+                >
+                  G
+                </span>
+                {oauthLoading ? "Opening Google..." : "Continue with Google"}
+              </button>
+
+              <div
+                style={{
+                  margin: "28px 0",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 14,
+                  color: "var(--ink-faint)",
+                  fontSize: 10,
+                  letterSpacing: "0.16em",
+                  textTransform: "uppercase",
+                }}
+              >
+                <span style={{ height: 1, flex: 1, background: "var(--card-edge)" }} />
+                or
+                <span style={{ height: 1, flex: 1, background: "var(--card-edge)" }} />
+              </div>
+
+              <form onSubmit={handleSubmit}>
                 <label
                   style={{
                     display: "block",
@@ -173,16 +311,16 @@ export default function SignInPage() {
                 <input
                   type="email"
                   value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  onChange={(event) => setEmail(event.target.value)}
                   placeholder="you@somewhere.com"
                   required
-                  disabled={loading}
+                  disabled={loading || oauthLoading}
                   style={{
                     width: "100%",
                     padding: "16px 18px",
-                    background: "rgba(247, 241, 230, 0.6)",
+                    background: "#0d1711",
                     border: "1px solid var(--card-edge)",
-                    borderRadius: 2,
+                    borderRadius: 8,
                     fontFamily: "var(--font-serif)",
                     fontSize: 18,
                     fontStyle: "italic",
@@ -191,62 +329,30 @@ export default function SignInPage() {
                     transition: "border-color 400ms ease",
                     boxSizing: "border-box",
                   }}
-                  onFocus={(e) => {
-                    e.currentTarget.style.borderColor = "var(--sage)";
-                  }}
-                  onBlur={(e) => {
-                    e.currentTarget.style.borderColor = "var(--card-edge)";
-                  }}
                 />
-
-                {errorMsg && (
-                  <div
-                    style={{
-                      marginTop: 10,
-                      fontSize: 13,
-                      color: "#b05a3a",
-                      textAlign: "left",
-                      fontStyle: "italic",
-                      fontFamily: "var(--font-serif)",
-                    }}
-                  >
-                    {errorMsg}
-                  </div>
-                )}
 
                 <button
                   type="submit"
-                  disabled={loading}
+                  disabled={loading || oauthLoading}
                   style={{
                     width: "100%",
                     marginTop: 16,
                     padding: "16px 24px",
-                    background: loading ? "var(--ink-muted)" : "var(--ink)",
-                    color: "var(--paper)",
-                    border: "none",
-                    borderRadius: 2,
+                    background: loading ? "var(--ink-muted)" : "#241f15",
+                    color: "#fff0cd",
+                    border: "1px solid var(--tan)",
+                    borderRadius: 999,
                     fontFamily: "var(--font-sans)",
                     fontSize: 13,
                     letterSpacing: "0.16em",
                     textTransform: "uppercase",
-                    cursor: loading ? "default" : "pointer",
+                    cursor: loading || oauthLoading ? "default" : "pointer",
                     transition: "opacity 400ms ease",
                   }}
                 >
                   {loading ? "Sending..." : "Send the link"}
                 </button>
               </form>
-
-              <div
-                style={{
-                  marginTop: 40,
-                  fontSize: 12,
-                  color: "var(--ink-muted)",
-                  lineHeight: 1.7,
-                }}
-              >
-                By continuing you agree to our quiet terms and privacy policy.
-              </div>
             </div>
           ) : (
             <div className="refuge-fade-in-slow">
@@ -304,22 +410,33 @@ export default function SignInPage() {
                 <span style={{ color: "var(--ink)" }}>{email}</span>. Open it
                 on this device when you are ready.
               </p>
-              <div
+              <button
+                type="button"
                 style={{
                   marginTop: 48,
                   fontSize: 12,
                   color: "var(--ink-muted)",
                   letterSpacing: "0.06em",
                   cursor: "pointer",
+                  background: "transparent",
+                  border: "none",
                 }}
                 onClick={() => setSent(false)}
               >
                 No email yet? Try again
-              </div>
+              </button>
             </div>
           )}
         </div>
       </div>
     </div>
+  );
+}
+
+export default function SignInPage() {
+  return (
+    <Suspense>
+      <SignInContent />
+    </Suspense>
   );
 }
