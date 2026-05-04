@@ -173,7 +173,8 @@ select {
 /* ── Responsive app surfaces ── */
 
 .arrival-page,
-.home-page {
+.home-page,
+.course-page {
   overflow-x: hidden;
 }
 
@@ -327,6 +328,14 @@ select {
     height: 180px !important;
   }
 
+  .course-suggested-badge {
+    top: 14px !important;
+    left: 14px !important;
+    padding: 7px 11px !important;
+    color: var(--paper) !important;
+    background: rgba(243, 231, 207, 0.96) !important;
+  }
+
   .course-row-title {
     font-size: 32px !important;
   }
@@ -337,6 +346,94 @@ select {
     justify-content: space-between !important;
     align-items: flex-end !important;
     text-align: left !important;
+  }
+
+  .course-hero {
+    height: 330px !important;
+  }
+
+  .course-topbar {
+    top: calc(env(safe-area-inset-top) + 18px) !important;
+    left: 20px !important;
+    right: 20px !important;
+    align-items: flex-start !important;
+    gap: 14px !important;
+  }
+
+  .course-back-button {
+    max-width: 138px !important;
+    font-size: 10px !important;
+    line-height: 1.35 !important;
+    letter-spacing: 0.1em !important;
+  }
+
+  .course-brand-nav {
+    gap: 10px !important;
+    font-size: 18px !important;
+  }
+
+  .course-title-block {
+    margin-top: -152px !important;
+    padding: 0 24px !important;
+  }
+
+  .course-title {
+    font-size: 52px !important;
+    line-height: 0.98 !important;
+  }
+
+  .course-detail-grid {
+    grid-template-columns: 1fr !important;
+    gap: 28px !important;
+    padding: 92px 24px 42px !important;
+  }
+
+  .course-detail-grid p {
+    max-width: none !important;
+  }
+
+  .course-detail-grid p:first-child {
+    font-size: 26px !important;
+    line-height: 1.45 !important;
+  }
+
+  .course-meta-card {
+    width: 100% !important;
+    padding: 22px !important;
+    background: rgba(16, 28, 21, 0.88) !important;
+  }
+
+  .course-path-section {
+    padding: 28px 24px 88px !important;
+  }
+
+  .course-path-head {
+    display: block !important;
+  }
+
+  .course-path-head button {
+    margin-top: 14px !important;
+  }
+
+  .course-day-row {
+    grid-template-columns: 1fr auto !important;
+    gap: 10px 16px !important;
+    padding: 18px 0 !important;
+  }
+
+  .course-day-row > div:nth-child(1),
+  .course-day-row > div:nth-child(2) {
+    grid-row: 1;
+  }
+
+  .course-day-row > div:nth-child(3) {
+    grid-column: 1 / -1;
+    font-size: 24px !important;
+  }
+
+  .course-day-row > div:nth-child(4),
+  .course-day-row > div:nth-child(5) {
+    grid-row: 3;
   }
 }
 
@@ -365,5 +462,17 @@ select {
 
   .course-row-title {
     font-size: 29px !important;
+  }
+
+  .course-title {
+    font-size: 46px !important;
+  }
+
+  .course-detail-grid {
+    padding-top: 78px !important;
+  }
+
+  .course-detail-grid p:first-child {
+    font-size: 23px !important;
   }
 }

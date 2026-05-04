@@ -356,7 +356,7 @@ function CourseRow({
     >
       {/* Number */}
       <div
-        className="course-row-thumb"
+        className="course-row-index"
         style={{
           fontFamily: "var(--font-serif)",
           fontSize: 14,
@@ -370,6 +370,7 @@ function CourseRow({
 
       {/* Thumbnail */}
       <div
+        className="course-row-thumb"
         style={{
           position: "relative",
           width: "100%",
@@ -383,15 +384,18 @@ function CourseRow({
         <RefugeScene kind={course.scene} />
         {isSuggested && (
           <div
+            className="course-suggested-badge"
             style={{
               position: "absolute",
               top: 12,
               left: 12,
               padding: "4px 10px",
-              background: "rgba(243, 237, 226, 0.85)",
+              background: "rgba(243, 231, 207, 0.94)",
               backdropFilter: "blur(4px)",
-              color: "var(--ink)",
+              color: "var(--paper)",
+              border: "1px solid rgba(7, 16, 11, 0.1)",
               fontSize: 9,
+              fontWeight: 500,
               letterSpacing: "0.24em",
               textTransform: "uppercase",
               borderRadius: 1,

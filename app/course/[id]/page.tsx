@@ -72,18 +72,20 @@ export default function CoursePage({
 
   return (
     <div
+      className="course-page"
       style={{
         position: "relative",
-        minHeight: "100vh",
+        minHeight: "100svh",
         background: "var(--paper)",
         fontFamily: "var(--font-sans)",
         color: "var(--ink)",
       }}
     >
       {/* Hero band */}
-      <div style={{ position: "relative", height: 360, overflow: "hidden" }}>
+      <div className="course-hero" style={{ position: "relative", height: 360, overflow: "hidden" }}>
         <RefugeScene kind={course.scene} />
         <div
+          className="course-topbar"
           style={{
             position: "absolute",
             inset: 0,
@@ -106,6 +108,7 @@ export default function CoursePage({
           }}
         >
           <button
+            className="course-back-button"
             onClick={() => router.push("/home")}
             style={{
               background: "transparent",
@@ -125,6 +128,7 @@ export default function CoursePage({
             ← Back to the library
           </button>
           <div
+            className="course-brand-nav"
             style={{
               display: "flex",
               alignItems: "center",
@@ -160,6 +164,7 @@ export default function CoursePage({
 
       {/* Title block — overlaps the gradient transition */}
       <div
+        className="course-title-block"
         style={{
           position: "relative",
           zIndex: 2,
@@ -182,13 +187,14 @@ export default function CoursePage({
           A course in {course.days} days
         </div>
         <h1
+          className="course-title"
           style={{
             fontFamily: "var(--font-serif)",
             fontSize: "clamp(48px, 6vw, 84px)",
             fontWeight: 400,
             margin: 0,
             color: "#f3ede2",
-            letterSpacing: "-0.02em",
+            letterSpacing: 0,
             lineHeight: 1,
             textShadow: "0 2px 30px rgba(0,0,0,0.2)",
           }}
@@ -211,6 +217,7 @@ export default function CoursePage({
 
       {/* Description + meta */}
       <section
+        className="course-detail-grid"
         style={{
           position: "relative",
           zIndex: 1,
@@ -253,6 +260,7 @@ export default function CoursePage({
         </div>
 
         <div
+          className="course-meta-card"
           style={{
             display: "flex",
             flexDirection: "column",
@@ -306,6 +314,7 @@ export default function CoursePage({
 
       {/* Days list */}
       <section
+        className="course-path-section"
         style={{
           position: "relative",
           zIndex: 1,
@@ -315,6 +324,7 @@ export default function CoursePage({
         }}
       >
         <div
+          className="course-path-head"
           style={{
             display: "flex",
             alignItems: "baseline",
@@ -361,6 +371,7 @@ export default function CoursePage({
 
           return (
             <div
+              className="course-day-row"
               key={dayNum}
               onMouseEnter={() => setHoveredDay(dayNum)}
               onMouseLeave={() => setHoveredDay(null)}
