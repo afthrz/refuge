@@ -1,4 +1,4 @@
-import { createClient } from "@/app/lib/supabase";
+import { createClient, hasSupabaseConfig } from "@/app/lib/supabase";
 
 export type Session = {
   id: string;
@@ -36,6 +36,7 @@ function saveLocalSession(session: Session): void {
  */
 export async function getSessions(): Promise<Session[]> {
   if (typeof window === "undefined") return [];
+  if (!hasSupabaseConfig()) return getLocalSessions();
 
   try {
     const supabase = createClient();
@@ -88,6 +89,8 @@ export async function saveSession(
   saveLocalSession(session);
 
   // Also save to Supabase if the user is signed in
+  if (!hasSupabaseConfig()) return session;
+
   try {
     const supabase = createClient();
     const {
