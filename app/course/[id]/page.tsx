@@ -37,15 +37,38 @@ export default function CoursePage({
 
   const [hoveredDay, setHoveredDay] = useState<number | null>(null);
   const [signedIn, setSignedIn] = useState(false);
+  const [accessChecked, setAccessChecked] = useState(false);
 
   useEffect(() => {
-    if (!hasSupabaseConfig()) return;
+    if (!hasSupabaseConfig()) {
+      setAccessChecked(true);
+      return;
+    }
 
     const supabase = createClient();
-    supabase.auth.getUser().then(({ data: { user } }) => {
-      setSignedIn(!!user);
+    supabase.auth.getUser().then(async ({ data: { user } }) => {
+      if (!user) {
+        router.replace("/");
+        return;
+      }
+      setSignedIn(true);
+
+      const { data: purchase } = await supabase
+        .from("purchases")
+        .select("id")
+        .eq("user_id", user.id)
+        .maybeSingle();
+
+      if (!purchase) {
+        router.replace("/");
+        return;
+      }
+
+      setAccessChecked(true);
     });
-  }, []);
+  }, [router]);
+
+  if (!accessChecked) return null;
 
   if (!course) {
     return (
