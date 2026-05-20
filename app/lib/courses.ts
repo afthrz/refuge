@@ -37,50 +37,6 @@ export const COURSES: Course[] = [
       2: "/audio/slowingdown-2.mov",
     },
   },
-  {
-    id: "letting-go",
-    title: "Letting Go of the Timeline",
-    subtitle: "on releasing comparison",
-    description:
-      "For when everyone seems to be ahead. A quiet course on putting down the calendar you keep in your head.",
-    days: 21,
-    scene: "letting-go",
-    duration: "10 — 15 min",
-    teacher: "Voiced by Maren",
-  },
-  {
-    id: "returning",
-    title: "Returning",
-    subtitle: "on coming back to yourself after burnout",
-    description:
-      "A path home for the depleted. Three weeks of small, recoverable practices that ask nothing of you but your presence.",
-    days: 21,
-    scene: "returning",
-    duration: "12 — 18 min",
-    teacher: "Voiced by Joren",
-  },
-  {
-    id: "quiet-mind",
-    title: "The Quiet Mind",
-    subtitle: "foundational meditation",
-    description:
-      "If you have never sat still, begin here. Twenty-one days of the simplest practice: noticing, returning, beginning again.",
-    days: 21,
-    scene: "quiet-mind",
-    duration: "5 — 12 min",
-    teacher: "Voiced by Joren",
-  },
-  {
-    id: "sleep",
-    title: "Sleep",
-    subtitle: "wind-down sessions for restless minds",
-    description:
-      "For the late hours when thinking will not stop. Slow practices to lay the day down and let the body sink.",
-    days: 14,
-    scene: "sleep",
-    duration: "15 — 30 min",
-    teacher: "Voiced by Maren",
-  },
 ];
 
 export const COURSE_DAYS: string[] = [
@@ -118,13 +74,13 @@ export const ARRIVAL_OPTIONS: ArrivalOption[] = [
     id: "slow-down",
     label: "I need to slow down",
     sub: "A few quiet minutes to step out of the current.",
-    suggested: "quiet-mind",
+    suggested: "slowing-down",
   },
   {
     id: "feel-real",
     label: "I want to feel something real",
     sub: "A practice for returning to your own body.",
-    suggested: "returning",
+    suggested: "slowing-down",
   },
 ];
 
