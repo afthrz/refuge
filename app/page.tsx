@@ -444,8 +444,8 @@ body{background:var(--lp-bg)}
 .lp-btn-primary:hover:not(:disabled){background:#cbd9b7;transform:translateY(-1px)}.lp-btn-primary:disabled{opacity:.7;cursor:default}
 .lp-btn-full{width:100%;justify-content:center;margin-top:32px}
 .lp-arrow{display:inline-block;transition:transform .25s}.lp-btn-primary:hover .lp-arrow{transform:translateX(4px)}
-.lp-guarantee{font-family:var(--lp-serif);font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:var(--lp-cream-dim)}
-.lp-guarantee span{opacity:.5;margin:0 .6em}
+.lp-guarantee{font-family:'Inter',-apple-system,sans-serif;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--lp-cream-dim);line-height:1.8;text-align:center}
+.lp-guarantee span{opacity:.5;margin:0 .4em}
 .lp-hero{min-height:100vh;padding:140px 32px 120px;position:relative;overflow:hidden;isolation:isolate;display:flex;align-items:center}
 .lp-hero::before{content:"";position:absolute;inset:0;background:radial-gradient(55% 60% at 70% 50%,rgba(198,154,109,.22),transparent 70%),radial-gradient(40% 40% at 20% 30%,rgba(184,199,164,.08),transparent 70%);z-index:-1}
 .lp-hero::after{content:"";position:absolute;inset:0;background:radial-gradient(120% 80% at 50% 100%,rgba(0,0,0,.55),transparent 60%);z-index:-1}
@@ -477,7 +477,7 @@ body{background:var(--lp-bg)}
 .lp-portrait-caption{position:absolute;left:24px;bottom:22px;font-family:var(--lp-serif);font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:var(--lp-cream);opacity:.85}
 .lp-teacher-stats{margin-top:48px;display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--lp-line)}
 .lp-stat{padding:24px 12px 0 0}
-.lp-stat-n{font-family:var(--lp-serif);font-size:40px;line-height:1;color:var(--lp-cream);font-weight:400}
+.lp-stat-n{font-family:'Inter',-apple-system,sans-serif;font-size:38px;line-height:1;color:var(--lp-cream);font-weight:300;letter-spacing:-.02em}
 .lp-stat-l{margin-top:10px;font-family:var(--lp-serif);font-size:11px;letter-spacing:.26em;text-transform:uppercase;color:var(--lp-sage-deep)}
 .lp-curriculum{background:var(--lp-cream);color:#1c2a20;padding:160px 0 180px}
 .lp-curr-head{text-align:center;max-width:780px;margin:0 auto;padding:0 32px}
@@ -510,7 +510,7 @@ body{background:var(--lp-bg)}
 .lp-wave i{display:block;flex:1;background:linear-gradient(to top,rgba(61,90,50,.4),rgba(61,90,50,.95));border-radius:1px;transition:opacity .3s}
 .lp-wave i.played{opacity:1}.lp-wave i.coming{opacity:.3}
 .lp-player-controls{margin-top:28px;display:flex;align-items:center;justify-content:space-between;position:relative;z-index:2}
-.lp-time{font-family:var(--lp-serif);font-size:13px;letter-spacing:.16em;color:#3a4a3e;font-weight:500}
+.lp-time{font-family:'Inter',-apple-system,sans-serif;font-size:13px;letter-spacing:.08em;color:#3a4a3e;font-weight:400;font-variant-numeric:tabular-nums}
 .lp-play-btn{width:60px;height:60px;border-radius:50%;background:#10261a;color:var(--lp-cream);display:grid;place-items:center;border:none;cursor:pointer;box-shadow:0 0 0 8px rgba(16,38,26,.08),0 10px 20px -8px rgba(16,38,26,.5);transition:transform .2s}
 .lp-play-btn:hover{transform:scale(1.05)}
 .lp-included{background:#081210;padding:140px 0 160px;border-top:1px solid var(--lp-line)}
@@ -542,9 +542,9 @@ body{background:var(--lp-bg)}
 .lp-price-name{font-family:var(--lp-serif);font-style:italic;font-size:28px;color:var(--lp-cream)}
 .lp-price-badge{font-family:var(--lp-serif);font-size:11px;letter-spacing:.28em;text-transform:uppercase;color:var(--lp-copper);padding:6px 12px;border:1px solid var(--lp-copper);border-radius:999px}
 .lp-price-amount{margin-top:28px;display:flex;align-items:baseline;gap:14px}
-.lp-price-big{font-family:var(--lp-serif);font-size:80px;line-height:1;color:var(--lp-cream);font-weight:400;letter-spacing:-.02em}
-.lp-price-strike{font-family:var(--lp-serif);font-size:24px;color:var(--lp-cream-dim);text-decoration:line-through;text-decoration-color:rgba(198,154,109,.7)}
-.lp-price-once{font-family:var(--lp-serif);font-size:12px;letter-spacing:.28em;text-transform:uppercase;color:var(--lp-sage-deep);margin-left:auto;line-height:1.5}
+.lp-price-big{font-family:'Inter',-apple-system,sans-serif;font-size:80px;line-height:1;color:var(--lp-cream);font-weight:200;letter-spacing:-.04em}
+.lp-price-strike{font-family:'Inter',-apple-system,sans-serif;font-size:22px;color:var(--lp-cream-dim);text-decoration:line-through;text-decoration-color:rgba(198,154,109,.7);font-weight:300}
+.lp-price-once{font-family:'Inter',-apple-system,sans-serif;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--lp-sage-deep);margin-left:auto;line-height:1.6}
 .lp-price-list{margin:28px 0 0;padding:0;list-style:none}
 .lp-price-list li{padding:12px 0;font-family:var(--lp-serif);font-size:17px;color:var(--lp-cream);display:flex;align-items:center;gap:14px}
 .lp-price-list li::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--lp-sage);flex-shrink:0}
@@ -596,5 +596,7 @@ body{background:var(--lp-bg)}
   .lp-price-card{padding:32px 26px}
   .lp-price-big{font-size:64px}
   .lp-problem-grid,.lp-weeks,.lp-testimonials,.lp-included-grid,.lp-teacher-grid,.lp-session-inner,.lp-faq-inner,.lp-pricing-inner,.lp-finale-inner,.lp-problem-head,.lp-curr-head,.lp-voices-head,.lp-included-head{padding-left:22px;padding-right:22px}
+  .lp-guarantee{letter-spacing:.06em;font-size:10px}
+  .lp-hero-cta-row{gap:10px}
 }
 `;
