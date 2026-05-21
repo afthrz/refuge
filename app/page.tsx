@@ -202,7 +202,7 @@ export default function LandingPage() {
         <div className="lp-teacher-grid">
           <div className="lp-teacher-portrait reveal">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/images/monk-portrait.png" alt="Monk Samarn" />
+            <img src="/images/monk-forest.png" alt="Monk Samarn at the forest temple" />
             <div className="lp-vignette" />
             <div className="lp-portrait-caption">Monk Samarn · Northern Thailand, 2024</div>
           </div>
