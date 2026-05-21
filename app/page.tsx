@@ -219,9 +219,13 @@ export default function LandingPage() {
               No incense required. No experience. No belief in anything except the possibility that ten quiet minutes can change a day.
             </p>
             <div className="lp-teacher-stats">
-              {[["40yrs", "In practice"], ["12,400+", "Students guided"], ["4.9/5", "Across 800 reviews"]].map(([n, l]) => (
+              {[
+                ["Theravāda", "Forest tradition"],
+                ["Secular", "No belief required"],
+                ["10 min", "All you need"],
+              ].map(([n, l]) => (
                 <div key={l} className="lp-stat">
-                  <div className="lp-stat-n">{n}</div>
+                  <div className="lp-stat-n" style={{ fontSize: 22, fontFamily: "var(--lp-serif)", fontStyle: "italic", fontWeight: 400 }}>{n}</div>
                   <div className="lp-stat-l">{l}</div>
                 </div>
               ))}
@@ -311,22 +315,40 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* TESTIMONIALS */}
+      {/* SCIENCE */}
       <section className="lp-voices" id="voices">
         <div className="lp-voices-head reveal">
-          <div className="lp-eyebrow lp-eyebrow-dark">From people who have walked it</div>
-          <h2 style={{ marginTop: 24 }}>800+ have begun. <em className="lp-it-green">Here&apos;s what stayed with them.</em></h2>
+          <div className="lp-eyebrow lp-eyebrow-dark">What the research shows</div>
+          <h2 style={{ marginTop: 24 }}>Ten minutes a day.<br /><em className="lp-it-green">Measurable change.</em></h2>
+          <p className="lp-lede lp-lede-dark" style={{ marginTop: 24 }}>
+            Decades of peer-reviewed research confirm what meditators have always known — a consistent practice reshapes how the brain and body respond to stress.
+          </p>
         </div>
         <div className="lp-testimonials">
           {[
-            { dark: true, quote: "I'd tried four meditation apps and quit each one. This one didn't ask anything of me. Ten minutes. A voice. That was it. On day six I cried for no reason I could name, and I think it was relief.", by: "Maya, 34 · Bangkok" },
-            { dark: false, quote: "I'm a skeptic and I run a hospital floor. I needed something that wouldn't feel like a cult. Monk Samarn is the opposite of a guru — he just sits next to you. I've slept through the night for the first time in eight months.", by: "David, 51 · Chicago" },
-            { dark: true, quote: "I bought it for $29 expecting nothing. The week-two meditation on the inner critic alone is worth ten times that. I've returned to it seventeen times.", by: "Priya, 28 · London" },
+            {
+              dark: true,
+              label: "Stress & anxiety",
+              source: "Harvard Medical School",
+              finding: "Regular mindfulness meditation reduces activity in the amygdala — the brain's threat-detection centre — leading to measurably lower cortisol and a calmer baseline response to daily stress.",
+            },
+            {
+              dark: false,
+              label: "Sleep quality",
+              source: "JAMA Internal Medicine",
+              finding: "A landmark randomised trial found that mindfulness meditation significantly improved sleep quality in adults with moderate sleep problems, outperforming sleep hygiene education alone.",
+            },
+            {
+              dark: true,
+              label: "Brain structure",
+              source: "Massachusetts General Hospital",
+              finding: "MRI studies show that just eight weeks of daily meditation produces measurable increases in grey matter density in regions associated with self-awareness, compassion, and attention.",
+            },
           ].map((t, i) => (
             <div key={i} className={`lp-tcard ${t.dark ? "lp-tcard-dark" : "lp-tcard-light"} reveal`}>
-              <div className="lp-stars">★ ★ ★ ★ ★</div>
-              <q className="lp-tcard-q">{t.quote}</q>
-              <div className="lp-byline">— {t.by}</div>
+              <div className="lp-sci-label">{t.label}</div>
+              <q className="lp-tcard-q">{t.finding}</q>
+              <div className="lp-byline">— {t.source}</div>
             </div>
           ))}
         </div>
@@ -342,11 +364,9 @@ export default function LandingPage() {
           <div className="lp-price-card">
             <div className="lp-price-top">
               <div className="lp-price-name">Slowing Down</div>
-              <div className="lp-price-badge">Founding Price</div>
             </div>
             <div className="lp-price-amount">
               <div className="lp-price-big">$29</div>
-              <div className="lp-price-strike">$79</div>
               <div className="lp-price-once">One-time<br />lifetime access</div>
             </div>
             <ul className="lp-price-list">
@@ -534,6 +554,7 @@ body{background:var(--lp-bg)}
 .lp-tcard-dark .lp-tcard-q{color:#e8e3d6}.lp-tcard-light .lp-tcard-q{color:#13201a;font-weight:500}
 .lp-byline{margin-top:28px;font-family:var(--lp-serif);font-size:13px;letter-spacing:.16em;font-style:italic}
 .lp-tcard-dark .lp-byline{color:var(--lp-sage)}.lp-tcard-light .lp-byline{color:#3d5a32;font-weight:500}
+.lp-sci-label{font-family:'Inter',-apple-system,sans-serif;font-size:10px;letter-spacing:.22em;text-transform:uppercase;font-weight:600;color:var(--lp-sage);margin-bottom:4px}
 .lp-pricing{background:var(--lp-bg);padding:160px 0 180px;position:relative;overflow:hidden;border-top:1px solid var(--lp-line)}
 .lp-pricing::before{content:"";position:absolute;inset:0;background:radial-gradient(50% 60% at 50% 60%,rgba(198,154,109,.15),transparent 70%),radial-gradient(40% 30% at 50% 0%,rgba(184,199,164,.08),transparent 70%)}
 .lp-pricing-inner{position:relative;max-width:760px;margin:0 auto;padding:0 32px;text-align:center}
