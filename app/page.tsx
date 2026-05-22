@@ -133,6 +133,7 @@ export default function LandingPage() {
           <a className="lp-nav-link" href="#course" onClick={scrollTo("course")}>The course</a>
           <a className="lp-nav-link" href="#teacher" onClick={scrollTo("teacher")}>Teacher</a>
           <a className="lp-nav-link" href="#voices" onClick={scrollTo("voices")}>Voices</a>
+          <a className="lp-nav-signin" href="/signin">Sign in</a>
           <button className="lp-nav-cta" onClick={scrollTo("pricing")}>Begin · $29</button>
         </div>
       </nav>
@@ -150,6 +151,7 @@ export default function LandingPage() {
             <div className="lp-hero-cta-row">
               <button className="lp-btn-primary" onClick={scrollTo("pricing")}>Begin for $29 <span className="lp-arrow">→</span></button>
               <div className="lp-guarantee">$29 one-time <span>·</span> Lifetime access <span>·</span> 30-day refund</div>
+              <a href="/signin" className="lp-hero-signin">Already have access? Sign in →</a>
             </div>
           </div>
           <div className="lp-hero-portrait">
@@ -454,6 +456,10 @@ body{background:var(--lp-bg)}
 .lp-nav-link:hover{color:var(--lp-cream)}
 .lp-nav-cta{padding:10px 18px;border:1px solid var(--lp-line-strong);border-radius:999px;color:var(--lp-cream);background:none;cursor:pointer;font-family:var(--lp-serif);font-size:12px;letter-spacing:.28em;text-transform:uppercase;transition:background .2s,border-color .2s}
 .lp-nav-cta:hover{background:rgba(184,199,164,.1);border-color:var(--lp-sage)}
+.lp-nav-signin{color:var(--lp-cream-dim);text-decoration:none;font-family:var(--lp-serif);font-size:12px;letter-spacing:.2em;text-transform:uppercase;transition:color .2s}
+.lp-nav-signin:hover{color:var(--lp-cream)}
+.lp-hero-signin{font-family:var(--lp-serif);font-size:13px;color:var(--lp-cream-dim);text-decoration:none;letter-spacing:.06em;transition:color .2s;margin-top:4px}
+.lp-hero-signin:hover{color:var(--lp-sage)}
 .lp-eyebrow{font-family:var(--lp-serif);font-weight:500;font-size:12px;letter-spacing:.32em;text-transform:uppercase;color:var(--lp-sage);display:inline-flex;align-items:center;gap:.7em}
 .lp-eyebrow::before{content:"";width:18px;height:1px;background:currentColor;opacity:.6}
 .lp-eyebrow-dark{color:#3d5a32}.lp-eyebrow-no-rule::before{display:none}
