@@ -130,26 +130,7 @@ export default function CoursePage({
             zIndex: 2,
           }}
         >
-          <button
-            className="course-back-button"
-            onClick={() => router.push("/home")}
-            style={{
-              background: "transparent",
-              border: "none",
-              cursor: "pointer",
-              color: "#f3ede2",
-              fontFamily: "var(--font-sans)",
-              fontSize: 12,
-              letterSpacing: "0.16em",
-              textTransform: "uppercase",
-              display: "flex",
-              alignItems: "center",
-              gap: 10,
-              opacity: 0.85,
-            }}
-          >
-            ← Back to the library
-          </button>
+          <div />
           <div
             className="course-brand-nav"
             style={{
@@ -289,7 +270,7 @@ export default function CoursePage({
             flexDirection: "column",
             gap: 22,
             padding: "24px 28px",
-            background: "rgba(247, 241, 230, 0.5)",
+            background: "var(--card)",
             border: "1px solid var(--card-edge)",
             borderRadius: 2,
             alignSelf: "start",
