@@ -2,7 +2,6 @@ import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
 import { createClient } from "@supabase/supabase-js";
 
-// Stripe sends the raw body — Next.js must not parse it
 export const runtime = "nodejs";
 
 export async function POST(req: NextRequest) {
@@ -37,36 +36,28 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "No email on session" }, { status: 400 });
   }
 
-  // Use service role key so we can create users and read purchases
   const supabase = createClient(supabaseUrl, supabaseServiceKey, {
     auth: { autoRefreshToken: false, persistSession: false },
   });
 
-  // Find or create the user
-  const { data: existing } = await supabase
-    .from("auth.users")
-    .select("id")
-    .eq("email", email)
-    .maybeSingle();
+  // generateLink creates the user if they don't exist, or finds them if they do.
+  // It returns the user object either way — this replaces the broken auth.users query.
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://therefuge.app";
+  const { data: linkData, error: linkError } = await supabase.auth.admin.generateLink({
+    type: "magiclink",
+    email,
+    options: { redirectTo: `${siteUrl}/auth/callback?next=/course/slowing-down` },
+  });
 
-  let userId: string;
-
-  if (existing?.id) {
-    userId = existing.id;
-  } else {
-    const { data: created, error } = await supabase.auth.admin.createUser({
-      email,
-      email_confirm: true,
-    });
-    if (error || !created.user) {
-      console.error("Failed to create user:", error);
-      return NextResponse.json({ error: "Could not create user" }, { status: 500 });
-    }
-    userId = created.user.id;
+  if (linkError || !linkData?.user) {
+    console.error("Failed to find/create user:", linkError);
+    return NextResponse.json({ error: "Could not create user" }, { status: 500 });
   }
 
+  const userId = linkData.user.id;
+
   // Record the purchase
-  await supabase.from("purchases").upsert(
+  const { error: purchaseError } = await supabase.from("purchases").upsert(
     {
       user_id: userId,
       course_id: "slowing-down",
@@ -75,13 +66,10 @@ export async function POST(req: NextRequest) {
     { onConflict: "stripe_session_id" }
   );
 
-  // Send magic link so the user can log in without a password
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
-  await supabase.auth.admin.generateLink({
-    type: "magiclink",
-    email,
-    options: { redirectTo: `${siteUrl}/auth/callback?next=/course/slowing-down` },
-  });
+  if (purchaseError) {
+    console.error("Failed to record purchase:", purchaseError);
+    return NextResponse.json({ error: "Could not record purchase" }, { status: 500 });
+  }
 
   return NextResponse.json({ received: true });
 }

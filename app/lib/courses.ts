@@ -33,8 +33,8 @@ export const COURSES: Course[] = [
     duration: "8 — 14 min",
     teacher: "Voiced by Maren",
     episodes: {
-      1: "/audio/slowingdown-1.mov",
-      2: "/audio/slowingdown-2.mov",
+      1: "/api/audio/1",
+      2: "/api/audio/2",
     },
   },
 ];
