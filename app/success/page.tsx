@@ -1,9 +1,43 @@
 "use client";
 
-import Link from "next/link";
+import { FormEvent, useState } from "react";
+import { useRouter } from "next/navigation";
 import RefugeWash from "@/app/components/RefugeWash";
+import { createClient, hasSupabaseConfig } from "@/app/lib/supabase";
 
 export default function SuccessPage() {
+  const router = useRouter();
+  const [email, setEmail] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [sent, setSent] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  async function handleSubmit(e: FormEvent) {
+    e.preventDefault();
+    if (!email.includes("@")) return;
+    setLoading(true);
+    setError(null);
+
+    try {
+      const supabase = createClient();
+      const { error } = await supabase.auth.signInWithOtp({
+        email,
+        options: { emailRedirectTo: `${window.location.origin}/auth/callback?next=/course/slowing-down` },
+      });
+      if (error) { setError(error.message); return; }
+      setSent(true);
+    } catch {
+      setError("Something went wrong. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  if (!hasSupabaseConfig()) {
+    router.replace("/signin");
+    return null;
+  }
+
   return (
     <div
       style={{
@@ -25,148 +59,115 @@ export default function SuccessPage() {
         style={{
           position: "relative",
           zIndex: 1,
-          maxWidth: 520,
+          maxWidth: 480,
           width: "100%",
           textAlign: "center",
           padding: "48px 32px",
         }}
       >
-        {/* envelope icon */}
-        <div
-          style={{
-            width: 64,
-            height: 64,
-            margin: "0 auto 36px",
-            borderRadius: "50%",
-            border: "1px solid var(--sage)",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            animation: "refuge-breath 4s ease-in-out infinite",
-          }}
-        >
-          <svg
-            width="24"
-            height="20"
-            viewBox="0 0 24 20"
-            fill="none"
-            stroke="var(--sage)"
-            strokeWidth="1"
-          >
-            <rect x="1" y="2" width="22" height="16" rx="0.5" />
-            <path d="M1 3 L12 11 L23 3" />
-          </svg>
-        </div>
-
-        <div
-          style={{
-            fontSize: 11,
-            letterSpacing: "0.28em",
-            textTransform: "uppercase",
-            color: "var(--tan)",
-            marginBottom: 20,
-          }}
-        >
-          Payment complete
-        </div>
-
-        <h1
-          style={{
-            fontFamily: "var(--font-serif)",
-            fontSize: "clamp(36px, 5vw, 52px)",
-            fontWeight: 400,
-            lineHeight: 1.2,
-            margin: "0 0 24px",
-            color: "var(--ink)",
-          }}
-        >
-          <em>Check your email.</em>
-        </h1>
-
-        <p
-          style={{
-            fontFamily: "var(--font-serif)",
-            fontStyle: "italic",
-            fontSize: 18,
-            lineHeight: 1.65,
-            color: "var(--ink-soft)",
-            margin: "0 0 48px",
-          }}
-        >
-          We&apos;ve sent you a link to access your course. Open it on any
-          device — no password needed.
-        </p>
-
-        <div
-          style={{
-            padding: "24px 28px",
-            border: "1px solid var(--card-edge)",
-            background: "rgba(16,28,21,0.6)",
-            textAlign: "left",
-            marginBottom: 40,
-          }}
-        >
-          <div
-            style={{
-              fontSize: 11,
-              letterSpacing: "0.2em",
-              textTransform: "uppercase",
-              color: "var(--ink-muted)",
-              marginBottom: 16,
-            }}
-          >
-            What happens next
-          </div>
-          {[
-            "Open the email from Refuge",
-            "Click the link (it logs you in automatically)",
-            "Day 1 of Slowing Down is waiting for you",
-          ].map((step, i) => (
+        {!sent ? (
+          <>
+            {/* checkmark */}
             <div
-              key={i}
               style={{
-                display: "flex",
-                alignItems: "flex-start",
-                gap: 14,
-                padding: "10px 0",
-                borderBottom:
-                  i < 2 ? "1px solid rgba(197,166,108,0.1)" : "none",
+                width: 64, height: 64, margin: "0 auto 36px",
+                borderRadius: "50%", border: "1px solid var(--sage)",
+                display: "flex", alignItems: "center", justifyContent: "center",
               }}
             >
-              <span
-                style={{
-                  fontSize: 10,
-                  letterSpacing: "0.08em",
-                  color: "var(--ink-faint)",
-                  minWidth: 20,
-                  paddingTop: 2,
-                }}
-              >
-                {i + 1}.
-              </span>
-              <span
-                style={{
-                  fontSize: 14,
-                  lineHeight: 1.6,
-                  color: "var(--ink-soft)",
-                }}
-              >
-                {step}
-              </span>
+              <svg width="22" height="16" viewBox="0 0 22 16" fill="none" stroke="var(--sage)" strokeWidth="1.5">
+                <path d="M1 8 L7 14 L21 1" />
+              </svg>
             </div>
-          ))}
-        </div>
 
-        <p style={{ fontSize: 13, color: "var(--ink-faint)", lineHeight: 1.6 }}>
-          No email after a few minutes?{" "}
-          <Link
-            href="/signin"
-            style={{ color: "var(--ink-muted)", textDecoration: "underline" }}
-          >
-            Sign in here
-          </Link>{" "}
-          with the email you used at checkout.
-        </p>
+            <div style={{ fontSize: 11, letterSpacing: "0.28em", textTransform: "uppercase", color: "var(--tan)", marginBottom: 20 }}>
+              Payment complete
+            </div>
+
+            <h1 style={{ fontFamily: "var(--font-serif)", fontSize: "clamp(32px, 5vw, 48px)", fontWeight: 400, lineHeight: 1.2, margin: "0 0 20px", color: "var(--ink)" }}>
+              <em>Enter your email to access the course.</em>
+            </h1>
+
+            <p style={{ fontFamily: "var(--font-serif)", fontStyle: "italic", fontSize: 17, lineHeight: 1.65, color: "var(--ink-soft)", margin: "0 0 36px" }}>
+              Use the same email you entered at checkout. We&apos;ll send you a link — no password needed.
+            </p>
+
+            <form onSubmit={handleSubmit} style={{ textAlign: "left" }}>
+              <label style={{ display: "block", fontSize: 11, letterSpacing: "0.16em", textTransform: "uppercase", color: "var(--ink-muted)", marginBottom: 10 }}>
+                Your email
+              </label>
+              <input
+                type="email"
+                value={email}
+                onChange={e => setEmail(e.target.value)}
+                placeholder="you@somewhere.com"
+                required
+                disabled={loading}
+                style={{
+                  width: "100%", padding: "16px 18px",
+                  background: "#0d1711", border: "1px solid var(--card-edge)",
+                  borderRadius: 8, fontFamily: "var(--font-serif)",
+                  fontSize: 18, fontStyle: "italic", color: "var(--ink)",
+                  outline: "none", boxSizing: "border-box",
+                }}
+              />
+              {error && (
+                <div style={{ marginTop: 12, padding: "10px 14px", background: "rgba(208,150,86,0.1)", border: "1px solid rgba(208,150,86,0.28)", borderRadius: 6, color: "#f0c08a", fontSize: 13 }}>
+                  {error}
+                </div>
+              )}
+              <button
+                type="submit"
+                disabled={loading}
+                style={{
+                  width: "100%", marginTop: 14, padding: "16px 24px",
+                  background: loading ? "var(--ink-muted)" : "#241f15",
+                  color: "#fff0cd", border: "1px solid var(--tan)",
+                  borderRadius: 999, fontFamily: "var(--font-sans)",
+                  fontSize: 13, letterSpacing: "0.16em", textTransform: "uppercase",
+                  cursor: loading ? "default" : "pointer",
+                }}
+              >
+                {loading ? "Sending…" : "Send my access link"}
+              </button>
+            </form>
+          </>
+        ) : (
+          <>
+            <div
+              style={{
+                width: 64, height: 64, margin: "0 auto 36px",
+                borderRadius: "50%", border: "1px solid var(--sage)",
+                display: "flex", alignItems: "center", justifyContent: "center",
+                animation: "refuge-breath 4s ease-in-out infinite",
+              }}
+            >
+              <svg width="24" height="20" viewBox="0 0 24 20" fill="none" stroke="var(--sage)" strokeWidth="1">
+                <rect x="1" y="2" width="22" height="16" rx="0.5" />
+                <path d="M1 3 L12 11 L23 3" />
+              </svg>
+            </div>
+
+            <div style={{ fontSize: 11, letterSpacing: "0.28em", textTransform: "uppercase", color: "var(--tan)", marginBottom: 20 }}>
+              Check your email
+            </div>
+
+            <h1 style={{ fontFamily: "var(--font-serif)", fontSize: "clamp(32px, 5vw, 48px)", fontWeight: 400, lineHeight: 1.2, margin: "0 0 20px", color: "var(--ink)" }}>
+              <em>Your link is on its way.</em>
+            </h1>
+
+            <p style={{ fontFamily: "var(--font-serif)", fontStyle: "italic", fontSize: 17, lineHeight: 1.65, color: "var(--ink-soft)", margin: 0 }}>
+              We sent a link to <strong style={{ color: "var(--ink)" }}>{email}</strong>. Open it on any device — it logs you straight into your course.
+            </p>
+
+            <button
+              onClick={() => setSent(false)}
+              style={{ marginTop: 40, fontSize: 12, color: "var(--ink-muted)", letterSpacing: "0.06em", cursor: "pointer", background: "transparent", border: "none" }}
+            >
+              Wrong email? Try again
+            </button>
+          </>
+        )}
       </div>
     </div>
   );
