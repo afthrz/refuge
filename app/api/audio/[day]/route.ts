@@ -12,9 +12,8 @@ export async function GET(
 ) {
   const { day } = await params;
 
-  // Only days 1 and 2 exist so far
-  const allowed = ["1", "2"];
-  if (!allowed.includes(day)) {
+  const dayNum = parseInt(day, 10);
+  if (!Number.isFinite(dayNum) || dayNum < 1 || dayNum > 21) {
     return NextResponse.json({ error: "Not found" }, { status: 404 });
   }
 
@@ -52,11 +51,11 @@ export async function GET(
 
   // Serve the file
   try {
-    const filePath = path.join(process.cwd(), "public", "audio", `slowingdown-${day}.mov`);
+    const filePath = path.join(process.cwd(), "public", "audio", `slowingdown-${dayNum}.mp3`);
     const fileBuffer = await readFile(filePath);
     return new NextResponse(fileBuffer, {
       headers: {
-        "Content-Type": "video/quicktime",
+        "Content-Type": "audio/mpeg",
         "Cache-Control": "private, no-store",
         "Content-Disposition": "inline",
       },
