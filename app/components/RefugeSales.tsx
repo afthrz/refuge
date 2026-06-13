@@ -299,12 +299,7 @@ export default function RefugeSales() {
                   <div className="rg-stack-item rg-stack-reveal" key={it.name}>
                     <div className="rg-stack-head">
                       <div>
-                        <div className="rg-stack-name">
-                          {it.name}
-                          {it.unlocksAfter && (
-                            <span className="rg-stack-lock">Unlocks at Day 21</span>
-                          )}
-                        </div>
+                        <div className="rg-stack-name">{it.name}</div>
                         {it.tag && <div className="rg-stack-tag">{it.tag}</div>}
                       </div>
                       <div className="rg-stack-price">{it.price}</div>
@@ -363,7 +358,7 @@ export default function RefugeSales() {
                 )}
               </button>
               <div className="rg-foot-line">
-                Secure checkout · Apple Pay · No subscription · 30-day refund
+                Secure checkout · Apple Pay · No subscription · 21-day money-back
               </div>
             </div>
           </div>

@@ -591,7 +591,7 @@ function BundleCard({
           </div>
         </div>
         <span style={{ fontSize: 11, letterSpacing: "0.18em", textTransform: "uppercase", color: "var(--ink-faint)", whiteSpace: "nowrap" }}>
-          {afterPath ? "Unlocks at Day 21" : recorded > 0 ? `${recorded} of ${total} ready` : "Coming soon"}
+          {afterPath ? "Finish 21 days first" : recorded > 0 ? `${recorded} of ${total} ready` : "Coming soon"}
         </span>
       </button>
 
