@@ -24,10 +24,17 @@ export default function SuccessPage() {
         email,
         options: { emailRedirectTo: `${window.location.origin}/auth/callback?next=/course/slowing-down` },
       });
-      if (error) { setError(error.message); return; }
+      if (error) {
+        setError(
+          "Your payment went through and is safe. We couldn't send your link just now — wait a minute and try again, or email hello@therefuge.app and we'll get you in."
+        );
+        return;
+      }
       setSent(true);
     } catch {
-      setError("Something went wrong. Please try again.");
+      setError(
+        "Your payment went through and is safe. We couldn't send your link just now — wait a minute and try again, or email hello@therefuge.app and we'll get you in."
+      );
     } finally {
       setLoading(false);
     }
