@@ -19,6 +19,7 @@ import {
 export default function RefugeSales() {
   const [buying, setBuying] = useState(false);
   const [openFaq, setOpenFaq] = useState<number | null>(0);
+  const [stackOpen, setStackOpen] = useState(false);
 
   const open = doorOpen();
   const price = currentPrice();
@@ -269,45 +270,23 @@ export default function RefugeSales() {
           </div>
         </section>
 
-        {/* STACK — dark */}
+        {/* STACK / PRICE — dark. Price + CTA lead; the value stack collapses below. */}
         <section className="rg-sec" id="stack">
           <div className="rg-narrow">
-            <div className="rg-eyebrow">What&apos;s inside</div>
-            <p className="rg-body rg-stack-intro">
-              Here is everything that becomes yours the moment you step inside:
-            </p>
+            <div className="rg-eyebrow">Begin when you&apos;re ready</div>
 
-            <div className="rg-stack">
-              {STACK.map((it) => (
-                <div className="rg-stack-item" key={it.name}>
-                  <div className="rg-stack-head">
-                    <div>
-                      <div className="rg-stack-name">{it.name}</div>
-                      {it.tag && <div className="rg-stack-tag">{it.tag}</div>}
-                    </div>
-                    <div className="rg-stack-price">{it.price}</div>
-                  </div>
-                  <p className="rg-stack-desc">{it.desc}</p>
-                </div>
-              ))}
-            </div>
-
-            <p className="rg-body rg-yours">
-              <strong className="rg-strong">YOURS FOR GOOD</strong> — not a
-              subscription. Everything stays yours.
-            </p>
-
-            <div className="rg-total">
+            {/* Price card — the first thing you see when you tap Begin Day 1 */}
+            <div className="rg-pricecard">
               <div className="rg-total-line">
-                <span className="rg-total-strike">$288 total value</span>
+                <span className="rg-total-strike">$288 value</span>
                 <span className="rg-total-arrow">→</span>
                 <span className="rg-total-now">
                   <span className="rg-skim">Today: ${price}, once.</span>
                 </span>
               </div>
               <p className="rg-total-sub">
-                One ten-minute sit per day. Less than a single therapy session,
-                for twenty-one guided ones.
+                Everything below, yours for life. One ten-minute sit a day —
+                less than a single therapy session, for twenty-one guided ones.
               </p>
               <button
                 className="rg-btn rg-btn-full"
@@ -323,9 +302,45 @@ export default function RefugeSales() {
                 )}
               </button>
               <div className="rg-foot-line">
-                Secure checkout · Apple Pay · No subscription
+                Secure checkout · Apple Pay · No subscription · 30-day refund
               </div>
             </div>
+
+            {/* Collapsible value stack */}
+            <button
+              className="rg-stack-toggle"
+              onClick={() => setStackOpen((o) => !o)}
+              aria-expanded={stackOpen}
+            >
+              <span>
+                {stackOpen ? "Hide the details" : "See everything included"}
+                <span className="rg-stack-toggle-count"> · 5 things, $288 value</span>
+              </span>
+              <span className="rg-stack-toggle-chev">{stackOpen ? "–" : "+"}</span>
+            </button>
+
+            {stackOpen && (
+              <div className="rg-stack-reveal">
+                <div className="rg-stack">
+                  {STACK.map((it) => (
+                    <div className="rg-stack-item" key={it.name}>
+                      <div className="rg-stack-head">
+                        <div>
+                          <div className="rg-stack-name">{it.name}</div>
+                          {it.tag && <div className="rg-stack-tag">{it.tag}</div>}
+                        </div>
+                        <div className="rg-stack-price">{it.price}</div>
+                      </div>
+                      <p className="rg-stack-desc">{it.desc}</p>
+                    </div>
+                  ))}
+                </div>
+                <p className="rg-body rg-yours">
+                  <strong className="rg-strong">YOURS FOR GOOD</strong> — not a
+                  subscription. Everything stays yours.
+                </p>
+              </div>
+            )}
           </div>
         </section>
 
@@ -650,6 +665,13 @@ const CSS = `
 .rg-stack-price{font-family:var(--serif);font-size:22px;color:var(--sage);white-space:nowrap}
 .rg-stack-desc{font-family:var(--serif);font-size:17px;line-height:1.65;color:rgba(243,237,224,.74);margin:0;max-width:58ch}
 .rg-yours{margin-top:30px;font-family:var(--sans);font-size:13px;letter-spacing:.04em;color:var(--cream-dim)}
+.rg-pricecard{margin-top:8px;padding:36px 32px;border:1px solid var(--line-strong);border-radius:12px;background:linear-gradient(180deg,rgba(184,199,164,.05),rgba(184,199,164,.01))}
+.rg-stack-toggle{margin-top:18px;width:100%;display:flex;align-items:center;justify-content:space-between;gap:14px;padding:18px 22px;background:none;border:1px solid var(--line);border-radius:10px;cursor:pointer;font-family:var(--sans);font-size:13px;letter-spacing:.06em;color:var(--cream);transition:border-color .2s,background .2s}
+.rg-stack-toggle:hover{border-color:var(--sage);background:rgba(184,199,164,.05)}
+.rg-stack-toggle-count{color:var(--cream-dim)}
+.rg-stack-toggle-chev{font-size:20px;color:var(--sage);line-height:1}
+.rg-stack-reveal{animation:rgReveal .4s ease}
+@keyframes rgReveal{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:translateY(0)}}
 .rg-total{margin-top:22px;padding:34px 0 0;border-top:1px solid var(--line)}
 .rg-total-line{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;margin-bottom:8px}
 .rg-total-strike{font-family:var(--serif);font-size:20px;color:var(--cream-dim);text-decoration:line-through;text-decoration-color:rgba(198,154,109,.7)}
