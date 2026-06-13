@@ -280,7 +280,7 @@ export default function RefugeSales() {
 
             <div className="rg-stack">
               {/* Always-visible items */}
-              {STACK.slice(0, 3).map((it) => (
+              {STACK.slice(0, 2).map((it) => (
                 <div className="rg-stack-item" key={it.name}>
                   <div className="rg-stack-head">
                     <div>
@@ -295,7 +295,7 @@ export default function RefugeSales() {
 
               {/* The rest, revealed on expand */}
               {stackOpen &&
-                STACK.slice(3).map((it) => (
+                STACK.slice(2).map((it) => (
                   <div className="rg-stack-item rg-stack-reveal" key={it.name}>
                     <div className="rg-stack-head">
                       <div>
@@ -309,22 +309,22 @@ export default function RefugeSales() {
                 ))}
             </div>
 
-            {!stackOpen && (
-              <button
-                className="rg-stack-toggle"
-                onClick={() => setStackOpen(true)}
-                aria-expanded={false}
-              >
-                <span>
-                  See everything included
+            <button
+              className="rg-stack-toggle"
+              onClick={() => setStackOpen((o) => !o)}
+              aria-expanded={stackOpen}
+            >
+              <span>
+                {stackOpen ? "Show less" : "See everything included"}
+                {!stackOpen && (
                   <span className="rg-stack-toggle-count">
                     {" "}
-                    · {STACK.length - 3} more, $288 total value
+                    · {STACK.length - 2} more, $288 total value
                   </span>
-                </span>
-                <span className="rg-stack-toggle-chev">+</span>
-              </button>
-            )}
+                )}
+              </span>
+              <span className="rg-stack-toggle-chev">{stackOpen ? "–" : "+"}</span>
+            </button>
 
             <p className="rg-body rg-yours">
               <strong className="rg-strong">YOURS FOR GOOD</strong> — not a
@@ -676,17 +676,17 @@ const CSS = `
 .rg-cite{display:flex;flex-wrap:wrap;gap:18px;margin-top:8px;font-family:var(--sans);font-size:12px;letter-spacing:.02em}
 
 .rg-stack-intro{color:var(--cream);font-weight:500;margin-bottom:6px}
-.rg-stack{margin:22px 0 36px}
-.rg-stack-item{padding:26px 0;border-top:1px solid var(--line)}
+.rg-stack{margin:18px 0 18px}
+.rg-stack-item{padding:18px 0;border-top:1px solid var(--line)}
 .rg-stack-item:last-child{border-bottom:1px solid var(--line)}
 .rg-stack-head{display:flex;justify-content:space-between;gap:20px;align-items:baseline;margin-bottom:10px}
 .rg-stack-name{font-family:var(--sans);font-size:13px;letter-spacing:.16em;text-transform:uppercase;color:var(--cream);font-weight:600}
 .rg-stack-tag{font-family:var(--serif);font-style:italic;font-size:16px;color:var(--cream-dim);margin-top:4px}
 .rg-stack-price{font-family:var(--serif);font-size:22px;color:var(--sage);white-space:nowrap}
-.rg-stack-desc{font-family:var(--serif);font-size:17px;line-height:1.65;color:rgba(243,237,224,.74);margin:0;max-width:58ch}
-.rg-yours{margin-top:30px;font-family:var(--sans);font-size:13px;letter-spacing:.04em;color:var(--cream-dim)}
-.rg-pricecard{margin-top:30px;padding:36px 32px;border:1px solid var(--line-strong);border-radius:12px;background:linear-gradient(180deg,rgba(184,199,164,.05),rgba(184,199,164,.01))}
-.rg-stack-toggle{margin-top:18px;width:100%;display:flex;align-items:center;justify-content:space-between;gap:14px;padding:18px 22px;background:none;border:1px solid var(--line);border-radius:10px;cursor:pointer;font-family:var(--sans);font-size:13px;letter-spacing:.06em;color:var(--cream);transition:border-color .2s,background .2s}
+.rg-stack-desc{font-family:var(--serif);font-size:15.5px;line-height:1.55;color:rgba(243,237,224,.72);margin:6px 0 0;max-width:58ch}
+.rg-yours{margin-top:18px;font-family:var(--sans);font-size:13px;letter-spacing:.04em;color:var(--cream-dim)}
+.rg-pricecard{margin-top:18px;padding:36px 32px;border:1px solid var(--line-strong);border-radius:12px;background:linear-gradient(180deg,rgba(184,199,164,.05),rgba(184,199,164,.01))}
+.rg-stack-toggle{margin-top:6px;width:100%;display:flex;align-items:center;justify-content:space-between;gap:14px;padding:18px 22px;background:none;border:1px solid var(--line);border-radius:10px;cursor:pointer;font-family:var(--sans);font-size:13px;letter-spacing:.06em;color:var(--cream);transition:border-color .2s,background .2s}
 .rg-stack-toggle:hover{border-color:var(--sage);background:rgba(184,199,164,.05)}
 .rg-stack-toggle-count{color:var(--cream-dim)}
 .rg-stack-toggle-chev{font-size:20px;color:var(--sage);line-height:1}
