@@ -7,6 +7,7 @@ import AccountNav from "@/app/components/AccountNav";
 import RefugeScene from "@/app/components/RefugeScene";
 import { getCourse, COURSE_DAYS } from "@/app/lib/courses";
 import { createClient, hasSupabaseConfig } from "@/app/lib/supabase";
+import { PRODUCT_MODULES, bundleProgress, type AudioItem } from "@/app/data/product";
 
 function PlayGlyph({ color }: { color: string }) {
   return (
@@ -478,6 +479,154 @@ export default function CoursePage({
           );
         })}
       </section>
+
+      {/* ── Beyond the path: the rest of the membership ── */}
+      <section
+        style={{
+          position: "relative",
+          zIndex: 1,
+          padding: "40px 64px 120px",
+          maxWidth: 1100,
+          margin: "0 auto",
+        }}
+      >
+        <div
+          style={{
+            fontSize: 11,
+            letterSpacing: "0.32em",
+            textTransform: "uppercase",
+            color: "var(--ink-muted)",
+            marginBottom: 8,
+          }}
+        >
+          Yours for good
+        </div>
+        <h2
+          style={{
+            fontFamily: "var(--font-serif)",
+            fontSize: "clamp(28px, 3.4vw, 44px)",
+            fontWeight: 400,
+            margin: "0 0 40px",
+            color: "var(--ink)",
+          }}
+        >
+          Beyond the path
+        </h2>
+
+        <div style={{ display: "flex", flexDirection: "column", gap: 18 }}>
+          {/* The Quiet Letters */}
+          <div
+            style={{
+              border: "1px solid var(--card-edge)",
+              background: "var(--card)",
+              borderRadius: 4,
+              padding: "26px 28px",
+            }}
+          >
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", gap: 16, flexWrap: "wrap" }}>
+              <div>
+                <div style={{ fontSize: 12, letterSpacing: "0.16em", textTransform: "uppercase", color: "var(--ink)", fontWeight: 600 }}>
+                  The Quiet Letters
+                </div>
+                <div style={{ fontFamily: "var(--font-serif)", fontStyle: "italic", fontSize: 16, color: "var(--ink-muted)", marginTop: 6, maxWidth: 520 }}>
+                  A short written reflection with every session. It arrives the moment you finish each day&apos;s practice.
+                </div>
+              </div>
+              <span style={{ fontSize: 11, letterSpacing: "0.18em", textTransform: "uppercase", color: "var(--sage)" }}>
+                All 21 · ready
+              </span>
+            </div>
+          </div>
+
+          {/* Audio bundles */}
+          {PRODUCT_MODULES.filter((m) => m.kind === "audio-bundle").map((mod) => (
+            <BundleCard key={mod.id} mod={mod} />
+          ))}
+        </div>
+      </section>
+    </div>
+  );
+}
+
+function BundleCard({
+  mod,
+}: {
+  mod: (typeof PRODUCT_MODULES)[number];
+}) {
+  const [open, setOpen] = useState(false);
+  const items: AudioItem[] = mod.items ?? [];
+  const { recorded, total } = bundleProgress(items);
+  const afterPath = mod.unlock === "after-path";
+
+  return (
+    <div
+      style={{
+        border: "1px solid var(--card-edge)",
+        background: "var(--card)",
+        borderRadius: 4,
+        padding: "26px 28px",
+        opacity: afterPath ? 0.78 : 1,
+      }}
+    >
+      <button
+        onClick={() => setOpen((o) => !o)}
+        style={{
+          width: "100%",
+          background: "transparent",
+          border: "none",
+          cursor: "pointer",
+          textAlign: "left",
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "baseline",
+          gap: 16,
+        }}
+      >
+        <div>
+          <div style={{ fontSize: 12, letterSpacing: "0.16em", textTransform: "uppercase", color: "var(--ink)", fontWeight: 600 }}>
+            {mod.name}
+          </div>
+          <div style={{ fontFamily: "var(--font-serif)", fontStyle: "italic", fontSize: 16, color: "var(--ink-muted)", marginTop: 6, maxWidth: 520 }}>
+            {mod.blurb}
+          </div>
+        </div>
+        <span style={{ fontSize: 11, letterSpacing: "0.18em", textTransform: "uppercase", color: "var(--ink-faint)", whiteSpace: "nowrap" }}>
+          {afterPath ? "Unlocks at Day 21" : recorded > 0 ? `${recorded} of ${total} ready` : "Coming soon"}
+        </span>
+      </button>
+
+      {open && (
+        <div style={{ marginTop: 22, borderTop: "1px solid var(--card-edge)", paddingTop: 8 }}>
+          {items.map((it) => {
+            const playable = it.status === "recorded" && it.audio && !afterPath;
+            return (
+              <div
+                key={it.id}
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  gap: 16,
+                  padding: "13px 0",
+                  borderBottom: "1px solid rgba(197,166,108,0.08)",
+                }}
+              >
+                <div>
+                  <div style={{ fontFamily: "var(--font-serif)", fontSize: 17, color: playable ? "var(--ink)" : "var(--ink-soft)" }}>
+                    {it.title}
+                  </div>
+                  <div style={{ fontSize: 13, color: "var(--ink-faint)", marginTop: 3, maxWidth: 480 }}>
+                    {it.description}
+                  </div>
+                </div>
+                <span style={{ fontSize: 11, letterSpacing: "0.12em", textTransform: "uppercase", color: playable ? "var(--sage)" : "var(--ink-faint)", whiteSpace: "nowrap" }}>
+                  {playable ? `Play · ${it.duration}` : it.duration}
+                </span>
+              </div>
+            );
+          })}
+        </div>
+      )}
     </div>
   );
 }
