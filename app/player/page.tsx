@@ -4,6 +4,7 @@ import { useState, useEffect, useRef, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { getCourse, getEpisodeUrl } from "@/app/lib/courses";
 import { saveSession } from "@/app/lib/sessions";
+import { getLetter } from "@/app/data/product";
 
 type Phase = "player" | "reflect" | "closed";
 
@@ -220,6 +221,7 @@ function PlayerInner() {
       {phase === "reflect" && (
         <ReflectionStage
           chosen={reflection}
+          dayNum={dayNum}
           onChoose={(r) => {
             setReflection(r);
             setTimeout(() => setPhase("closed"), 1600);
@@ -451,9 +453,11 @@ function PlayerStage({
 
 function ReflectionStage({
   chosen,
+  dayNum,
   onChoose,
 }: {
   chosen: string | null;
+  dayNum: number;
   onChoose: (r: string) => void;
 }) {
   const OPTIONS = [
@@ -461,6 +465,8 @@ function ReflectionStage({
     { id: "same", label: "the same" },
     { id: "heavier", label: "heavier" },
   ];
+
+  const letter = getLetter(dayNum);
 
   return (
     <div
@@ -556,6 +562,68 @@ function ReflectionStage({
       >
         Your answer is anonymous
       </div>
+
+      {/* The Quiet Letter for this day */}
+      {letter && chosen && (
+        <div
+          className="refuge-fade-in-slow"
+          style={{
+            marginTop: 80,
+            maxWidth: 560,
+            width: "100%",
+            textAlign: "left",
+            borderTop: "1px solid rgba(243,237,226,0.16)",
+            paddingTop: 48,
+          }}
+        >
+          <div
+            style={{
+              fontSize: 11,
+              letterSpacing: "0.28em",
+              textTransform: "uppercase",
+              opacity: 0.5,
+              marginBottom: 18,
+            }}
+          >
+            A quiet letter · Day {String(dayNum).padStart(2, "0")}
+          </div>
+          <div
+            style={{
+              fontFamily: "var(--font-serif)",
+              fontStyle: "italic",
+              fontSize: "clamp(22px, 3vw, 28px)",
+              lineHeight: 1.4,
+              color: "#f3ede2",
+              marginBottom: 28,
+            }}
+          >
+            &ldquo;{letter.line}&rdquo;
+          </div>
+          <p
+            style={{
+              fontFamily: "var(--font-serif)",
+              fontSize: 18,
+              lineHeight: 1.8,
+              opacity: 0.82,
+              margin: "0 0 28px",
+            }}
+          >
+            {letter.body}
+          </p>
+          <div
+            style={{
+              fontFamily: "var(--font-serif)",
+              fontStyle: "italic",
+              fontSize: 17,
+              opacity: 0.7,
+              borderLeft: "2px solid rgba(184,199,164,0.5)",
+              paddingLeft: 18,
+            }}
+          >
+            {letter.question}
+          </div>
+        </div>
+      )}
     </div>
   );
 }
