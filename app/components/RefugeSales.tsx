@@ -274,14 +274,14 @@ export default function RefugeSales() {
         <section className="rg-sec" id="stack">
           <div className="rg-narrow">
             <div className="rg-eyebrow">What&apos;s inside</div>
-            <p className="rg-body rg-stack-intro">
-              Here is everything that becomes yours the moment you step inside:
-            </p>
 
             <div className="rg-stack">
-              {/* Always-visible items */}
-              {STACK.slice(0, 2).map((it) => (
-                <div className="rg-stack-item" key={it.name}>
+              {/* Collapsed: 2 tight rows, no descriptions. Expanded: all 5 with detail. */}
+              {(stackOpen ? STACK : STACK.slice(0, 2)).map((it) => (
+                <div
+                  className={`rg-stack-item${stackOpen ? " rg-stack-reveal" : ""}`}
+                  key={it.name}
+                >
                   <div className="rg-stack-head">
                     <div>
                       <div className="rg-stack-name">{it.name}</div>
@@ -289,24 +289,9 @@ export default function RefugeSales() {
                     </div>
                     <div className="rg-stack-price">{it.price}</div>
                   </div>
-                  <p className="rg-stack-desc">{it.desc}</p>
+                  {stackOpen && <p className="rg-stack-desc">{it.desc}</p>}
                 </div>
               ))}
-
-              {/* The rest, revealed on expand */}
-              {stackOpen &&
-                STACK.slice(2).map((it) => (
-                  <div className="rg-stack-item rg-stack-reveal" key={it.name}>
-                    <div className="rg-stack-head">
-                      <div>
-                        <div className="rg-stack-name">{it.name}</div>
-                        {it.tag && <div className="rg-stack-tag">{it.tag}</div>}
-                      </div>
-                      <div className="rg-stack-price">{it.price}</div>
-                    </div>
-                    <p className="rg-stack-desc">{it.desc}</p>
-                  </div>
-                ))}
             </div>
 
             <button
@@ -687,8 +672,8 @@ const CSS = `
 .rg-cite{display:flex;flex-wrap:wrap;gap:18px;margin-top:8px;font-family:var(--sans);font-size:12px;letter-spacing:.02em}
 
 .rg-stack-intro{color:var(--cream);font-weight:500;margin-bottom:6px}
-.rg-stack{margin:18px 0 18px}
-.rg-stack-item{padding:18px 0;border-top:1px solid var(--line)}
+.rg-stack{margin:20px 0 16px}
+.rg-stack-item{padding:14px 0;border-top:1px solid var(--line)}
 .rg-stack-item:last-child{border-bottom:1px solid var(--line)}
 .rg-stack-head{display:flex;justify-content:space-between;gap:20px;align-items:baseline;margin-bottom:10px}
 .rg-stack-name{font-family:var(--sans);font-size:13px;letter-spacing:.16em;text-transform:uppercase;color:var(--cream);font-weight:600}
