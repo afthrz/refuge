@@ -308,7 +308,7 @@ export const PRODUCT_MODULES: ProductModule[] = [
     name: "The 3-Minute Door",
     kind: "audio-bundle",
     blurb: "Emergency sessions for the moment it hits you mid-day.",
-    unlock: "immediate",
+    unlock: "after-path",
     items: THREE_MINUTE_DOOR,
   },
   {
@@ -316,7 +316,7 @@ export const PRODUCT_MODULES: ProductModule[] = [
     name: "The Night Refuge",
     kind: "audio-bundle",
     blurb: "Built for the 2 a.m. replay.",
-    unlock: "immediate",
+    unlock: "after-path",
     items: NIGHT_REFUGE,
   },
   {

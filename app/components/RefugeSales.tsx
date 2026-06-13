@@ -299,7 +299,12 @@ export default function RefugeSales() {
                   <div className="rg-stack-item rg-stack-reveal" key={it.name}>
                     <div className="rg-stack-head">
                       <div>
-                        <div className="rg-stack-name">{it.name}</div>
+                        <div className="rg-stack-name">
+                          {it.name}
+                          {it.unlocksAfter && (
+                            <span className="rg-stack-lock">Unlocks at Day 21</span>
+                          )}
+                        </div>
                         {it.tag && <div className="rg-stack-tag">{it.tag}</div>}
                       </div>
                       <div className="rg-stack-price">{it.price}</div>
@@ -468,7 +473,15 @@ export default function RefugeSales() {
 
 /* ───────────── Data ───────────── */
 
-const STACK = [
+type StackItem = {
+  name: string;
+  tag: string;
+  price: string;
+  desc: string;
+  unlocksAfter?: boolean;
+};
+
+const STACK: StackItem[] = [
   {
     name: "THE PATH",
     tag: "21 guided sessions with Monk Samarn",
@@ -487,6 +500,7 @@ const STACK = [
     name: "THE 3-MINUTE DOOR",
     tag: "",
     price: "$27",
+    unlocksAfter: true,
     desc:
       "An emergency session for the moment it hits you mid-day. Three minutes, earbuds in, relief on demand, not on schedule.",
   },
@@ -494,6 +508,7 @@ const STACK = [
     name: "THE NIGHT REFUGE",
     tag: "",
     price: "$37",
+    unlocksAfter: true,
     desc:
       "Built for the 2 a.m. replay. Instead of fighting the thoughts, you're guided past them.",
   },
@@ -501,8 +516,9 @@ const STACK = [
     name: "THE OPEN DOOR",
     tag: "14 sessions for life after the path",
     price: "$67",
+    unlocksAfter: true,
     desc:
-      "Unlocked when you finish Day 21. Sessions for real moments: the morning of a hard day, after an argument, the anniversary, the relapse day when the old weight visits. The path is 21 days; this carries you toward week eight, where the research says the deeper changes live.",
+      "Sessions for real moments: the morning of a hard day, after an argument, the anniversary, the relapse day when the old weight visits. The path is 21 days; this carries you toward week eight, where the research says the deeper changes live.",
   },
 ];
 
@@ -681,6 +697,7 @@ const CSS = `
 .rg-stack-item:last-child{border-bottom:1px solid var(--line)}
 .rg-stack-head{display:flex;justify-content:space-between;gap:20px;align-items:baseline;margin-bottom:10px}
 .rg-stack-name{font-family:var(--sans);font-size:13px;letter-spacing:.16em;text-transform:uppercase;color:var(--cream);font-weight:600}
+.rg-stack-lock{display:inline-block;margin-left:10px;padding:3px 9px;border:1px solid var(--line-strong);border-radius:999px;font-size:9px;letter-spacing:.14em;color:var(--sage);vertical-align:middle}
 .rg-stack-tag{font-family:var(--serif);font-style:italic;font-size:16px;color:var(--cream-dim);margin-top:4px}
 .rg-stack-price{font-family:var(--serif);font-size:22px;color:var(--sage);white-space:nowrap}
 .rg-stack-desc{font-family:var(--serif);font-size:15.5px;line-height:1.55;color:rgba(243,237,224,.72);margin:6px 0 0;max-width:58ch}
