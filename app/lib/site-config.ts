@@ -6,7 +6,7 @@ export const SITE_STATE: "prelaunch" | "live" = "live";
 // The founding price is live until this exact moment. After it, the
 // page AND the Stripe checkout automatically switch to the regular
 // price. SET THIS to one week from the day you launch.
-export const LAUNCH_END = new Date("2026-05-31T23:59:00-07:00");
+export const LAUNCH_END = new Date("2026-06-30T23:59:00+07:00");
 
 export const FOUNDING_PRICE = 49;
 export const REGULAR_PRICE = 79;
