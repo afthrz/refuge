@@ -1,958 +1,724 @@
 "use client";
 
-import { FormEvent, useState } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import {
   SITE_STATE,
-  CHECKOUT_URL,
   FOUNDING_SEATS_REMAINING,
 } from "@/app/lib/site-config";
 
 /* ============================================================
-   THE REFUGE — sales page (preview)
-   Skim-path discipline: read bold ember spans top-to-bottom,
-   the full pitch must survive.
+   THE REFUGE — sales page (old green/cream design language)
+
+   Hormozi $100M Offers, kept in the existing Refuge palette:
+   value = (dream outcome × likelihood) ÷ (time delay × effort)
+   - Value stack with anchored prices ($288 → $49)
+   - Risk-reversal guarantee
+   - Scarcity exactly 3× (live only)
+   Skim path = the .rg-skim spans, read alone, = the whole pitch.
    ============================================================ */
 
 export default function PreviewPage() {
+  const [buying, setBuying] = useState(false);
+  const [openFaq, setOpenFaq] = useState<number | null>(0);
+
+  async function handleBuy() {
+    setBuying(true);
+    try {
+      const res = await fetch("/api/checkout", { method: "POST" });
+      const { url, error } = await res.json();
+      if (error) {
+        alert(error);
+        setBuying(false);
+        return;
+      }
+      if (url) window.location.href = url;
+    } catch {
+      setBuying(false);
+    }
+  }
+
+  const goStack = () =>
+    document.getElementById("stack")?.scrollIntoView({ behavior: "smooth" });
+
+  const liveLabel = buying ? "Opening checkout…" : "Begin Day 1";
+
   return (
     <>
       <style dangerouslySetInnerHTML={{ __html: CSS }} />
-      <main className="rf">
-        <Hero />
-        <DoorDivider stage={1} />
-        <Pain />
-        <DoorDivider stage={2} />
-        <Reframe />
-        <DoorDivider stage={3} />
-        <Timeline />
-        <DoorDivider stage={4} />
-        <Stack />
-        <DoorDivider stage={5} />
-        <Guarantee />
-        <DoorDivider stage={6} />
-        <FAQ />
-        <DoorDivider stage={7} />
-        <FinalClose />
-        <Footer />
-      </main>
+      <div className="rg">
+        {/* NAV */}
+        <nav className="rg-nav">
+          <a className="rg-brand" href="#top">
+            <span className="rg-dot" />
+            <span>Refuge</span>
+          </a>
+          <div className="rg-nav-right">
+            <Link className="rg-nav-link" href="/signin">
+              Sign in
+            </Link>
+            <button className="rg-nav-cta" onClick={goStack}>
+              Begin
+            </button>
+          </div>
+        </nav>
+
+        {/* HERO */}
+        <section className="rg-hero" id="top">
+          <div className="rg-hero-grid">
+            <div className="rg-hero-copy">
+              <div className="rg-eyebrow">
+                A 21-day guided path · Monk Samarn
+              </div>
+              <h1 className="rg-h1">
+                <span className="rg-skim">Come home to yourself.</span>
+              </h1>
+              <p className="rg-lede">
+                The quiet kind of healing.{" "}
+                <span className="rg-skim">Ten minutes a day, for 21 days.</span>{" "}
+                Sitting upright, eyes closed, guided by one voice. No experience
+                needed — if your mind wanders, you&apos;re doing it right.
+              </p>
+              <div className="rg-cta-col">
+                <button
+                  className="rg-btn"
+                  onClick={goStack}
+                  disabled={buying}
+                >
+                  Begin Day 1 <span className="rg-arrow">→</span>
+                </button>
+                {SITE_STATE === "live" && (
+                  <p className="rg-scarcity">
+                    The door closes Sunday night · Founding Circle:{" "}
+                    {FOUNDING_SEATS_REMAINING} of 100 places remain
+                  </p>
+                )}
+              </div>
+            </div>
+
+            <figure className="rg-portrait">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/images/monk-portrait.png"
+                alt="Monk Samarn seated beneath a banyan tree"
+              />
+              <div className="rg-portrait-vig" aria-hidden />
+              <figcaption className="rg-portrait-cap">
+                Monk Samarn · your guide
+              </figcaption>
+            </figure>
+          </div>
+        </section>
+
+        {/* PAIN — cream */}
+        <section className="rg-sec rg-light">
+          <div className="rg-narrow">
+            <div className="rg-eyebrow rg-eyebrow-dark">
+              For the one still carrying it
+            </div>
+            <p className="rg-body">
+              You&apos;ve been carrying it for a while now. Maybe it&apos;s a
+              person. Maybe it&apos;s a version of you that ended. Maybe
+              it&apos;s the weight of holding everything together for everyone
+              else.
+            </p>
+            <p className="rg-body">
+              People say &ldquo;give it time.&rdquo; You did. Time alone
+              didn&apos;t do it.
+            </p>
+            <p className="rg-body">
+              You don&apos;t need more advice. You need a place to set it down
+              for ten minutes. That&apos;s what this is.
+            </p>
+          </div>
+        </section>
+
+        {/* REFRAME — dark */}
+        <section className="rg-sec">
+          <div className="rg-narrow">
+            <div className="rg-eyebrow">
+              &ldquo;But I can&apos;t meditate&rdquo;
+            </div>
+            <p className="rg-body">
+              Good. You&apos;re exactly who this was built for.
+            </p>
+            <p className="rg-body">
+              The Refuge has one rule: a wandering mind is not failure. Noticing
+              you wandered, and gently coming back — that&apos;s the entire
+              practice. Every return is one rep.{" "}
+              <span className="rg-skim">You cannot do it wrong here.</span>
+            </p>
+            <p className="rg-body">
+              And you don&apos;t have to believe in any of it for it to work.
+              Your breath works without your permission. It has been keeping you
+              alive all this time without being asked. We&apos;re just going to
+              sit with it, on a chair, eyes closed, ten minutes.
+            </p>
+          </div>
+        </section>
+
+        {/* TIMELINE — dark, with forest photo */}
+        <section className="rg-sec">
+          <div className="rg-split">
+            <div className="rg-split-copy">
+              <div className="rg-eyebrow">What to expect, honestly</div>
+              <p className="rg-body">
+                <strong className="rg-strong">Your first week:</strong> you
+                start catching your own mind during the day. Mid-spiral,
+                mid-replay — you notice sooner, instead of surfacing an hour
+                later still tangled.{" "}
+                <span className="rg-skim">
+                  The first shift arrives in week one.
+                </span>{" "}
+                It feels small. It&apos;s the whole skill.
+              </p>
+              <p className="rg-body">
+                <strong className="rg-strong">By Day 21:</strong> a pause opens
+                between what happens and how you respond. The 2 a.m. replay
+                loses its grip. You become a person who tends to their own mind.
+              </p>
+              <p className="rg-body">
+                <strong className="rg-strong">
+                  What daily practice builds toward:
+                </strong>{" "}
+                this isn&apos;t mystical.{" "}
+                <span className="rg-skim">
+                  Real research, measurable results.
+                </span>{" "}
+                In a{" "}
+                <a
+                  className="rg-link"
+                  href="https://www.nyu.edu/about/news-publications/news/2022/november/short-meditation-program-improves-cognitive-and-emotional-well-.html"
+                  target="_blank"
+                  rel="noopener"
+                >
+                  randomized NYU study
+                </a>
+                , about 13 minutes of daily meditation lowered anxiety, lifted
+                mood, and sharpened attention — in people who had never
+                meditated — over 8 weeks of practice.{" "}
+                <a
+                  className="rg-link"
+                  href="https://news.harvard.edu/gazette/story/2011/01/eight-weeks-to-a-better-brain/"
+                  target="_blank"
+                  rel="noopener"
+                >
+                  Harvard researchers
+                </a>{" "}
+                found consistent practice is associated with measurable changes
+                on brain scans in regions tied to stress and memory. Twenty-one
+                days is where the habit takes root. The science is what it grows
+                into.
+              </p>
+            </div>
+            <figure className="rg-split-figure">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/images/monk-forest.png"
+                alt="Monk Samarn at the forest temple"
+              />
+              <div className="rg-portrait-vig" aria-hidden />
+            </figure>
+          </div>
+        </section>
+
+        {/* BRAIN — cream, with brain illustration */}
+        <section className="rg-sec rg-light">
+          <div className="rg-brain-grid">
+            <div className="rg-brain-copy">
+              <div className="rg-eyebrow rg-eyebrow-dark">What the scans show</div>
+              <h2 className="rg-h2 rg-h2-dark">
+                The same quiet practice.<br />
+                <em>Seen from inside the skull.</em>
+              </h2>
+              <p className="rg-body">
+                When people meditate consistently, researchers can see it. In an
+                8-week MRI study at Harvard, regular practice was associated with
+                measurable changes in grey-matter density in the regions tied to
+                how we handle stress and hold memory.
+              </p>
+              <p className="rg-body">
+                Nothing here is promised in 21 days. But twenty-one days is where
+                the habit takes root — and the scans are a glimpse of what a
+                tended mind grows into.
+              </p>
+              <div className="rg-cite">
+                <a
+                  className="rg-link"
+                  href="https://news.harvard.edu/gazette/story/2011/01/eight-weeks-to-a-better-brain/"
+                  target="_blank"
+                  rel="noopener"
+                >
+                  Hölzel et al., Harvard / MGH (2011)
+                </a>
+                <a
+                  className="rg-link"
+                  href="https://www.nyu.edu/about/news-publications/news/2022/november/short-meditation-program-improves-cognitive-and-emotional-well-.html"
+                  target="_blank"
+                  rel="noopener"
+                >
+                  Dwyer et al., NYU (2022)
+                </a>
+              </div>
+            </div>
+            <figure className="rg-brain-figure">
+              <BrainGlyph />
+              <div className="rg-brain-legend">
+                <span>
+                  <i className="rg-dot-amy" /> Amygdala · stress response
+                </span>
+                <span>
+                  <i className="rg-dot-hip" /> Hippocampus · memory
+                </span>
+              </div>
+            </figure>
+          </div>
+        </section>
+
+        {/* STACK — dark */}
+        <section className="rg-sec" id="stack">
+          <div className="rg-narrow">
+            <div className="rg-eyebrow">What&apos;s inside</div>
+            <p className="rg-body rg-stack-intro">
+              Here is everything that becomes yours the moment you step inside:
+            </p>
+
+            <div className="rg-stack">
+              {STACK.map((it) => (
+                <div className="rg-stack-item" key={it.name}>
+                  <div className="rg-stack-head">
+                    <div>
+                      <div className="rg-stack-name">{it.name}</div>
+                      {it.tag && <div className="rg-stack-tag">{it.tag}</div>}
+                    </div>
+                    <div className="rg-stack-price">{it.price}</div>
+                  </div>
+                  <p className="rg-stack-desc">{it.desc}</p>
+                </div>
+              ))}
+            </div>
+
+            <p className="rg-body rg-yours">
+              <strong className="rg-strong">YOURS FOR GOOD</strong> — not a
+              subscription. Everything stays yours.
+            </p>
+
+            <div className="rg-total">
+              <div className="rg-total-line">
+                <span className="rg-total-strike">$288 total value</span>
+                <span className="rg-total-arrow">→</span>
+                <span className="rg-total-now">
+                  <span className="rg-skim">Today: $49, once.</span>
+                </span>
+              </div>
+              <p className="rg-total-sub">
+                One ten-minute sit per day. Less than a single therapy session,
+                for twenty-one guided ones.
+              </p>
+              <button className="rg-btn rg-btn-full" onClick={handleBuy} disabled={buying}>
+                {buying ? "Opening checkout…" : (
+                  <>Step inside — $49 <span className="rg-arrow">→</span></>
+                )}
+              </button>
+              <div className="rg-foot-line">
+                Secure checkout · Apple Pay · No subscription
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* GUARANTEE — moss */}
+        <section className="rg-sec rg-moss">
+          <div className="rg-narrow">
+            <div className="rg-eyebrow rg-eyebrow-moss">
+              The Homecoming Guarantee
+            </div>
+            <p className="rg-body rg-body-bright">
+              Sit with all 21 days. If by the end you don&apos;t feel the
+              beginning of a shift — more noticing, more space, more quiet —
+              reply to any email and{" "}
+              <span className="rg-skim">I&apos;ll refund you in full.</span> No
+              forms, no questions.
+            </p>
+            <p className="rg-body rg-body-bright">
+              You risk ten minutes a day. The rest is on me.
+            </p>
+
+            {SITE_STATE === "live" && (
+              <div className="rg-quiet-block">
+                <p className="rg-quiet">
+                  The door is open this week.{" "}
+                  <span className="rg-skim">It closes Sunday night.</span> The
+                  next opening hasn&apos;t been set. The first hundred who enter
+                  are the Founding Circle — their price stays at $49 forever, and
+                  their words shape the path for everyone after. At member 101,
+                  the price becomes $79 and never returns.
+                </p>
+              </div>
+            )}
+          </div>
+        </section>
+
+        {/* FAQ — dark */}
+        <section className="rg-sec">
+          <div className="rg-narrow">
+            <div className="rg-eyebrow">Quiet questions</div>
+            <div className="rg-faq">
+              {FAQ.map((it, i) => (
+                <div
+                  className={`rg-faq-item ${openFaq === i ? "open" : ""}`}
+                  key={it.q}
+                >
+                  <button
+                    className="rg-faq-q"
+                    onClick={() => setOpenFaq(openFaq === i ? null : i)}
+                    aria-expanded={openFaq === i}
+                  >
+                    <span>{it.q}</span>
+                    <span className="rg-faq-plus" aria-hidden>
+                      {openFaq === i ? "–" : "+"}
+                    </span>
+                  </button>
+                  {openFaq === i && <p className="rg-faq-a">{it.a}</p>}
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* FINAL — dark */}
+        <section className="rg-sec rg-final">
+          <div className="rg-narrow rg-final-inner">
+            <p className="rg-final-body">
+              You&apos;ve spent a long time being strong for everyone else.
+            </p>
+            <p className="rg-final-body">
+              This is ten minutes a day that belongs to you. Twenty-one days. A
+              chair, your breath, and a voice that knows the way back.
+            </p>
+            <p className="rg-final-body rg-final-line">The door is open.</p>
+            <button className="rg-btn" onClick={handleBuy} disabled={buying}>
+              {liveLabel} <span className="rg-arrow">→</span>
+            </button>
+            {SITE_STATE === "live" && (
+              <p className="rg-scarcity rg-scarcity-center">
+                <span className="rg-skim">Doors close Sunday night.</span>
+              </p>
+            )}
+          </div>
+        </section>
+
+        {/* FOOTER */}
+        <footer className="rg-footer">
+          <div className="rg-foot-inner">
+            <span>© The Refuge</span>
+            <a href="mailto:hello@therefuge.app" className="rg-foot-link">
+              Contact
+            </a>
+            <Link href="/signin" className="rg-foot-link">
+              Sign in
+            </Link>
+            <span className="rg-foot-fine">
+              The Refuge is a meditation practice, not medical or psychological
+              treatment.
+            </span>
+          </div>
+        </footer>
+      </div>
     </>
   );
 }
 
-/* ───────────── Components ───────────── */
+/* ───────────── Data ───────────── */
 
-function Hero() {
+const STACK = [
+  {
+    name: "THE PATH",
+    tag: "21 guided sessions with Monk Samarn",
+    price: "$147",
+    desc:
+      "One session a day, in order, about ten minutes. Week one teaches you to notice. Week two, to release. Week three brings you home. Ten minutes in a chair is the entire cost of entry.",
+  },
+  {
+    name: "THE QUIET LETTERS",
+    tag: "",
+    price: "$30",
+    desc:
+      "A short written reflection with every session. One idea, one line worth keeping — the teaching in your pocket for the days you can't sit.",
+  },
+  {
+    name: "THE 3-MINUTE DOOR",
+    tag: "",
+    price: "$27",
+    desc:
+      "An emergency session for the moment it hits you mid-day. Three minutes, earbuds in, relief on demand, not on schedule.",
+  },
+  {
+    name: "THE NIGHT REFUGE",
+    tag: "",
+    price: "$37",
+    desc:
+      "Built for the 2 a.m. replay. Instead of fighting the thoughts, you're guided past them.",
+  },
+  {
+    name: "THE OPEN DOOR",
+    tag: "14 sessions for life after the path",
+    price: "$67",
+    desc:
+      "Unlocked when you finish Day 21. Sessions for real moments: the morning of a hard day, after an argument, the anniversary, the relapse day when the old weight visits. The path is 21 days; this carries you toward week eight, where the research says the deeper changes live.",
+  },
+];
+
+const FAQ = [
+  {
+    q: "Is this therapy?",
+    a: "No. The Refuge is a meditation practice, not treatment for grief, trauma, or a mental health condition. It sits beautifully alongside therapy. If you're in crisis, please reach for professional support first.",
+  },
+  {
+    q: "I've failed at meditation apps before.",
+    a: "Most apps hand you a library and wish you luck. This is a path: one session a day, in order, with a voice that expects your mind to wander. Wandering is the practice here.",
+  },
+  {
+    q: "Do I have to sit on the floor?",
+    a: "No. A chair is perfect. Upright, dignified, eyes closed. Ten minutes.",
+  },
+  {
+    q: "Is this religious?",
+    a: "Monk Samarn draws from a contemplative tradition, but the practice is open to anyone. No belief required. Just sitting.",
+  },
+  {
+    q: "What if I miss a day?",
+    a: "You resume where you left off. The door doesn't lock.",
+  },
+];
+
+/* ───────────── Brain illustration (inline SVG, no asset) ───────────── */
+
+function BrainGlyph() {
   return (
-    <section className="rf-section rf-hero">
-      <div className="rf-door-light" aria-hidden />
-      <div className="rf-wrap rf-hero-inner">
-        <div className="rf-eyebrow">A 21-day guided path · Monk Samarn</div>
-        <h1 className="rf-h1">
-          <span className="rf-skim">Come home to yourself.</span>
-        </h1>
-        <p className="rf-lede">
-          The quiet kind of healing.{" "}
-          <span className="rf-skim">Ten minutes a day, for 21 days.</span>{" "}
-          Sitting upright, eyes closed, guided by one voice. No experience
-          needed — if your mind wanders, you&apos;re doing it right.
-        </p>
-        <div className="rf-cta-row">
-          <PrimaryAction context="hero" />
-        </div>
-        {SITE_STATE === "live" && (
-          <p className="rf-scarcity">
-            The door closes Sunday night · Founding Circle:{" "}
-            {FOUNDING_SEATS_REMAINING} of 100 places remain
-          </p>
-        )}
-      </div>
-    </section>
+    <svg
+      className="rg-brain-svg"
+      viewBox="0 0 240 200"
+      fill="none"
+      role="img"
+      aria-label="Stylised brain with the amygdala and hippocampus highlighted"
+    >
+      {/* outer brain silhouette */}
+      <path
+        d="M70 150 C40 150 30 120 42 104 C30 92 36 70 54 66 C56 46 78 38 94 48 C104 36 128 36 138 50 C160 44 182 56 182 78 C200 84 202 110 186 122 C194 140 178 158 156 152 C148 166 122 168 112 154 C98 164 78 162 70 150 Z"
+        stroke="#3d5a32"
+        strokeWidth="1.6"
+        opacity="0.85"
+      />
+      {/* central fissure */}
+      <path
+        d="M114 50 C112 78 116 104 112 152"
+        stroke="#3d5a32"
+        strokeWidth="1.2"
+        opacity="0.5"
+      />
+      {/* gyri folds */}
+      <path d="M64 78 C80 74 86 92 76 100 C90 102 92 120 78 124" stroke="#3d5a32" strokeWidth="1.1" opacity="0.45" />
+      <path d="M150 64 C140 76 154 86 148 98 C162 100 158 120 146 122" stroke="#3d5a32" strokeWidth="1.1" opacity="0.45" />
+      <path d="M96 70 C92 86 104 92 98 108 C92 120 102 132 96 144" stroke="#3d5a32" strokeWidth="1.1" opacity="0.4" />
+      <path d="M132 70 C136 86 126 96 132 110 C138 124 128 134 134 146" stroke="#3d5a32" strokeWidth="1.1" opacity="0.4" />
+      {/* brainstem */}
+      <path d="M110 152 C108 166 112 178 120 184" stroke="#3d5a32" strokeWidth="1.4" opacity="0.6" />
+
+      {/* amygdala — stress */}
+      <circle cx="92" cy="120" r="16" fill="#c69a6d" opacity="0.16" />
+      <circle cx="92" cy="120" r="5.5" fill="#c69a6d" />
+      <circle cx="92" cy="120" r="5.5" fill="#c69a6d" opacity="0.5">
+        <animate attributeName="r" values="5.5;11;5.5" dur="3.2s" repeatCount="indefinite" />
+        <animate attributeName="opacity" values="0.5;0;0.5" dur="3.2s" repeatCount="indefinite" />
+      </circle>
+
+      {/* hippocampus — memory */}
+      <circle cx="138" cy="124" r="16" fill="#7d9070" opacity="0.16" />
+      <circle cx="138" cy="124" r="5.5" fill="#5f7a4f" />
+      <circle cx="138" cy="124" r="5.5" fill="#5f7a4f" opacity="0.5">
+        <animate attributeName="r" values="5.5;11;5.5" dur="3.2s" begin="1.1s" repeatCount="indefinite" />
+        <animate attributeName="opacity" values="0.5;0;0.5" dur="3.2s" begin="1.1s" repeatCount="indefinite" />
+      </circle>
+    </svg>
   );
 }
 
-function Pain() {
-  return (
-    <section className="rf-section">
-      <div className="rf-wrap rf-narrow">
-        <div className="rf-eyebrow">For the one still carrying it</div>
-        <p className="rf-body">
-          You&apos;ve been carrying it for a while now. Maybe it&apos;s a
-          person. Maybe it&apos;s a version of you that ended. Maybe it&apos;s
-          the weight of holding everything together for everyone else.
-        </p>
-        <p className="rf-body">
-          People say &ldquo;give it time.&rdquo; You did. Time alone
-          didn&apos;t do it.
-        </p>
-        <p className="rf-body">
-          You don&apos;t need more advice. You need a place to set it down for
-          ten minutes. That&apos;s what this is.
-        </p>
-      </div>
-    </section>
-  );
-}
-
-function Reframe() {
-  return (
-    <section className="rf-section">
-      <div className="rf-wrap rf-narrow">
-        <div className="rf-eyebrow">&ldquo;But I can&apos;t meditate&rdquo;</div>
-        <p className="rf-body">Good. You&apos;re exactly who this was built for.</p>
-        <p className="rf-body">
-          The Refuge has one rule: a wandering mind is not failure. Noticing
-          you wandered, and gently coming back — that&apos;s the entire
-          practice. Every return is one rep.{" "}
-          <span className="rf-skim">You cannot do it wrong here.</span>
-        </p>
-        <p className="rf-body">
-          And you don&apos;t have to believe in any of it for it to work. Your
-          breath works without your permission. It has been keeping you alive
-          all this time without being asked. We&apos;re just going to sit with
-          it, on a chair, eyes closed, ten minutes.
-        </p>
-      </div>
-    </section>
-  );
-}
-
-function Timeline() {
-  return (
-    <section className="rf-section">
-      <div className="rf-wrap rf-narrow">
-        <div className="rf-eyebrow">What to expect, honestly</div>
-        <p className="rf-body">
-          <strong className="rf-lede-strong">Your first week:</strong> you
-          start catching your own mind during the day. Mid-spiral, mid-replay
-          — you notice sooner, instead of surfacing an hour later still
-          tangled.{" "}
-          <span className="rf-skim">
-            The first shift arrives in week one.
-          </span>{" "}
-          It feels small. It&apos;s the whole skill.
-        </p>
-        <p className="rf-body">
-          <strong className="rf-lede-strong">By Day 21:</strong> a pause opens
-          between what happens and how you respond. The 2 a.m. replay loses
-          its grip. You become a person who tends to their own mind.
-        </p>
-        <p className="rf-body">
-          <strong className="rf-lede-strong">
-            What daily practice builds toward:
-          </strong>{" "}
-          this isn&apos;t mystical.{" "}
-          <span className="rf-skim">Real research, measurable results.</span>{" "}
-          In a{" "}
-          <a
-            className="rf-link"
-            href="https://www.nyu.edu/about/news-publications/news/2022/november/short-meditation-program-improves-cognitive-and-emotional-well-.html"
-            target="_blank"
-            rel="noopener"
-          >
-            randomized NYU study
-          </a>
-          , about 13 minutes of daily meditation lowered anxiety, lifted mood,
-          and sharpened attention — in people who had never meditated — over 8
-          weeks of practice.{" "}
-          <a
-            className="rf-link"
-            href="https://news.harvard.edu/gazette/story/2011/01/eight-weeks-to-a-better-brain/"
-            target="_blank"
-            rel="noopener"
-          >
-            Harvard researchers
-          </a>{" "}
-          found consistent practice is associated with measurable changes on
-          brain scans in regions tied to stress and memory. Twenty-one days is
-          where the habit takes root. The science is what it grows into.
-        </p>
-      </div>
-    </section>
-  );
-}
-
-function Stack() {
-  const items = [
-    {
-      name: "THE PATH",
-      tag: "21 guided sessions with Monk Samarn",
-      price: "$147",
-      desc:
-        "One session a day, in order, about ten minutes. Week one teaches you to notice. Week two, to release. Week three brings you home. Ten minutes in a chair is the entire cost of entry.",
-    },
-    {
-      name: "THE QUIET LETTERS",
-      tag: "",
-      price: "$30",
-      desc:
-        "A short written reflection with every session. One idea, one line worth keeping — the teaching in your pocket for the days you can't sit.",
-    },
-    {
-      name: "THE 3-MINUTE DOOR",
-      tag: "",
-      price: "$27",
-      desc:
-        "An emergency session for the moment it hits you mid-day. Three minutes, earbuds in, relief on demand, not on schedule.",
-    },
-    {
-      name: "THE NIGHT REFUGE",
-      tag: "",
-      price: "$37",
-      desc: "Built for the 2 a.m. replay. Instead of fighting the thoughts, you're guided past them.",
-    },
-    {
-      name: "THE OPEN DOOR",
-      tag: "14 sessions for life after the path",
-      price: "$67",
-      desc:
-        "Unlocked when you finish Day 21. Sessions for real moments: the morning of a hard day, after an argument, the anniversary, the relapse day when the old weight visits. The path is 21 days; this carries you toward week eight, where the research says the deeper changes live.",
-    },
-  ];
-
-  return (
-    <section className="rf-section">
-      <div className="rf-wrap rf-narrow">
-        <div className="rf-eyebrow">What&apos;s inside</div>
-
-        <div className="rf-stack">
-          {items.map((it) => (
-            <div className="rf-stack-item" key={it.name}>
-              <div className="rf-stack-head">
-                <div>
-                  <div className="rf-stack-name">{it.name}</div>
-                  {it.tag && <div className="rf-stack-tag">{it.tag}</div>}
-                </div>
-                <div className="rf-stack-price">{it.price}</div>
-              </div>
-              <p className="rf-stack-desc">{it.desc}</p>
-            </div>
-          ))}
-        </div>
-
-        <p className="rf-body rf-yours">
-          <strong className="rf-lede-strong">YOURS FOR GOOD</strong> — not a
-          subscription. Everything stays yours.
-        </p>
-
-        <div className="rf-total">
-          <div className="rf-total-line">
-            <span className="rf-total-strike">$288 total value</span>
-            <span className="rf-total-arrow">→</span>
-            <span className="rf-total-price">
-              <span className="rf-skim">$288 of path for $49.</span>
-            </span>
-          </div>
-          <p className="rf-total-sub">
-            One ten-minute sit per day. Less than a single therapy session,
-            for twenty-one guided ones.
-          </p>
-          <PrimaryAction context="stack" liveLabel="Step inside — $49" />
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function Guarantee() {
-  return (
-    <section className="rf-section rf-moss">
-      <div className="rf-wrap rf-narrow">
-        <div className="rf-eyebrow rf-eyebrow-moss">
-          The Homecoming Guarantee
-        </div>
-        <p className="rf-body">
-          Sit with all 21 days. If by the end you don&apos;t feel the
-          beginning of a shift — more noticing, more space, more quiet — reply
-          to any email and{" "}
-          <span className="rf-skim">I&apos;ll refund you in full.</span> No
-          forms, no questions.
-        </p>
-        <p className="rf-body">
-          You risk ten minutes a day. The rest is on me.
-        </p>
-
-        {SITE_STATE === "live" && (
-          <div className="rf-quiet-block">
-            <p className="rf-quiet">
-              The door is open this week.{" "}
-              <span className="rf-skim">It closes Sunday night.</span> The next
-              opening hasn&apos;t been set. The first hundred who enter are
-              the Founding Circle — their price stays at $49 forever, and
-              their words shape the path for everyone after. At member 101,
-              the price becomes $79 and never returns.
-            </p>
-          </div>
-        )}
-      </div>
-    </section>
-  );
-}
-
-function FAQ() {
-  const items = [
-    {
-      q: "Is this therapy?",
-      a:
-        "No. The Refuge is a meditation practice, not treatment for grief, trauma, or a mental health condition. It sits beautifully alongside therapy. If you're in crisis, please reach for professional support first.",
-    },
-    {
-      q: "I've failed at meditation apps before.",
-      a:
-        "Most apps hand you a library and wish you luck. This is a path: one session a day, in order, with a voice that expects your mind to wander. Wandering is the practice here.",
-    },
-    {
-      q: "Do I have to sit on the floor?",
-      a: "No. A chair is perfect. Upright, dignified, eyes closed. Ten minutes.",
-    },
-    {
-      q: "Is this religious?",
-      a:
-        "Monk Samarn draws from a contemplative tradition, but the practice is open to anyone. No belief required. Just sitting.",
-    },
-    {
-      q: "What if I miss a day?",
-      a: "You resume where you left off. The door doesn't lock.",
-    },
-  ];
-
-  const [open, setOpen] = useState<number | null>(null);
-
-  return (
-    <section className="rf-section">
-      <div className="rf-wrap rf-narrow">
-        <div className="rf-eyebrow">Quiet questions</div>
-        <div className="rf-faq">
-          {items.map((it, i) => (
-            <div className={`rf-faq-item ${open === i ? "open" : ""}`} key={it.q}>
-              <button
-                className="rf-faq-q"
-                onClick={() => setOpen(open === i ? null : i)}
-                aria-expanded={open === i}
-              >
-                <span>{it.q}</span>
-                <span className="rf-faq-plus" aria-hidden>
-                  {open === i ? "–" : "+"}
-                </span>
-              </button>
-              {open === i && <p className="rf-faq-a">{it.a}</p>}
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function FinalClose() {
-  return (
-    <section className="rf-section rf-final">
-      <div className="rf-final-glow" aria-hidden />
-      <div className="rf-wrap rf-narrow rf-final-inner">
-        <p className="rf-body rf-final-body">
-          You&apos;ve spent a long time being strong for everyone else.
-        </p>
-        <p className="rf-body rf-final-body">
-          This is ten minutes a day that belongs to you. Twenty-one days. A
-          chair, your breath, and a voice that knows the way back.
-        </p>
-        <p className="rf-body rf-final-body rf-final-line">
-          The door is open.
-        </p>
-        <div className="rf-cta-row rf-cta-center">
-          <PrimaryAction context="final" />
-        </div>
-        {SITE_STATE === "live" && (
-          <p className="rf-scarcity rf-scarcity-center">
-            <span className="rf-skim">Doors close Sunday night.</span>
-          </p>
-        )}
-      </div>
-    </section>
-  );
-}
-
-function Footer() {
-  return (
-    <footer className="rf-footer">
-      <div className="rf-wrap rf-footer-inner">
-        <span>© The Refuge</span>
-        <Link href="/signin" className="rf-footer-link">
-          Sign in
-        </Link>
-        <a href="mailto:hello@therefuge.app" className="rf-footer-link">
-          Contact
-        </a>
-        <span className="rf-footer-fine">
-          The Refuge is a meditation practice, not medical or psychological
-          treatment.
-        </span>
-      </div>
-    </footer>
-  );
-}
-
-/* ───────────── Shared bits ───────────── */
-
-function DoorDivider({ stage }: { stage: number }) {
-  // Stage 1..7 — door opens slightly wider at each one.
-  const width = 1 + stage * 0.8; // 1.8px → 6.6px
-  const height = 40 + stage * 8; // 48 → 96
-  const opacity = Math.min(0.22 + stage * 0.06, 0.65);
-  const blur = Math.min(1 + stage * 0.5, 5);
-  return (
-    <div
-      className="rf-door-divider"
-      aria-hidden
-      style={{
-        width,
-        height,
-        opacity,
-        filter: `blur(${blur}px)`,
-      }}
-    />
-  );
-}
-
-function PrimaryAction({
-  context,
-  liveLabel = "Begin Day 1",
-}: {
-  context: "hero" | "stack" | "final";
-  liveLabel?: string;
-}) {
-  if (SITE_STATE === "live") {
-    return (
-      <a className="rf-btn" href={CHECKOUT_URL}>
-        {liveLabel}
-      </a>
-    );
-  }
-
-  // Prelaunch — email capture
-  const heading =
-    context === "hero"
-      ? "The door opens soon. Leave your name."
-      : context === "stack"
-      ? "Get notified when the door opens."
-      : "Get notified when the door opens.";
-
-  return <Waitlist heading={heading} buttonLabel="Get notified when the door opens" />;
-}
-
-function Waitlist({ heading, buttonLabel }: { heading: string; buttonLabel: string }) {
-  const [email, setEmail] = useState("");
-  const [name, setName] = useState("");
-  const [state, setState] = useState<"idle" | "loading" | "done" | "error">("idle");
-
-  async function handle(e: FormEvent) {
-    e.preventDefault();
-    if (!email.includes("@")) return;
-    setState("loading");
-    try {
-      const res = await fetch("/api/notify", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, name }),
-      });
-      setState(res.ok ? "done" : "error");
-    } catch {
-      setState("error");
-    }
-  }
-
-  if (state === "done") {
-    return (
-      <p className="rf-waitlist-thanks">
-        Thank you. Watch your inbox — the door opens soon.
-      </p>
-    );
-  }
-
-  return (
-    <form className="rf-waitlist" onSubmit={handle}>
-      <p className="rf-waitlist-heading">{heading}</p>
-      <div className="rf-waitlist-row">
-        <input
-          className="rf-input"
-          type="text"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          placeholder="Your name"
-          aria-label="Your name"
-        />
-        <input
-          className="rf-input"
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          placeholder="Your email"
-          required
-          aria-label="Your email"
-        />
-        <button
-          type="submit"
-          className="rf-btn rf-btn-wait"
-          disabled={state === "loading"}
-        >
-          {state === "loading" ? "…" : buttonLabel}
-        </button>
-      </div>
-      {state === "error" && (
-        <p className="rf-waitlist-err">Something went quiet. Try once more.</p>
-      )}
-    </form>
-  );
-}
-
-/* ───────────── Styles ───────────── */
+/* ───────────── Styles (Refuge green/cream design system) ───────────── */
 
 const CSS = `
-@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500&family=Inter:wght@300;400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Inter:wght@400;500;600&display=swap');
 
-.rf{
-  --rf-night:#07100b;
-  --rf-ember:#E8A04C;
-  --rf-ember-soft:#f1bc7c;
-  --rf-linen:#EDE6DA;
-  --rf-stone:#8A8178;
-  --rf-moss:#6B7559;
-  --rf-card:rgba(237,230,218,0.04);
-  --rf-line:rgba(237,230,218,0.10);
+.rg{
+  --bg:#0a1610;
+  --bg-deep:#081210;
+  --cream:#f3ede0;
+  --cream-dim:#c8c1b1;
+  --sage:#b8c7a4;
+  --sage-deep:#7d9070;
+  --copper:#c69a6d;
+  --gold:#e6c489;
+  --line:rgba(243,237,224,.12);
+  --line-strong:rgba(243,237,224,.22);
+  --serif:'Cormorant Garamond',Georgia,serif;
+  --sans:'Inter',-apple-system,system-ui,sans-serif;
 
-  background:var(--rf-night);
-  color:var(--rf-linen);
-  font-family:'Inter',-apple-system,system-ui,sans-serif;
-  font-weight:400;
-  line-height:1.7;
-  letter-spacing:0;
-  min-height:100vh;
+  background:var(--bg);color:var(--cream);
+  font-family:var(--serif);line-height:1.7;min-height:100vh;
 }
+.rg *,.rg *::before,.rg *::after{box-sizing:border-box}
+.rg p{margin:0 0 1.3em}
 
-/* Reset within scope */
-.rf *,
-.rf *::before,
-.rf *::after{box-sizing:border-box}
-.rf p{margin:0 0 1.4em}
+/* layout */
+.rg-sec{position:relative;padding:90px 24px}
+.rg-narrow{max-width:640px;margin:0 auto}
 
-/* Layout */
-.rf-section{
-  position:relative;
-  padding:80px 24px;
+/* nav */
+.rg-nav{
+  position:fixed;top:0;left:0;right:0;z-index:50;padding:20px 28px;
+  display:flex;align-items:center;justify-content:space-between;
+  background:rgba(10,22,16,.72);backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--line);
 }
-.rf-wrap{
-  max-width:1080px;
-  margin:0 auto;
-}
-.rf-narrow{
-  max-width:620px;
-}
+.rg-brand{display:inline-flex;align-items:center;gap:10px;font-family:var(--serif);font-style:italic;font-size:20px;font-weight:500;color:var(--cream);text-decoration:none}
+.rg-dot{width:8px;height:8px;border-radius:50%;background:var(--sage);box-shadow:0 0 14px 2px rgba(184,199,164,.5)}
+.rg-nav-right{display:flex;align-items:center;gap:22px}
+.rg-nav-link{font-family:var(--sans);font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--cream-dim);text-decoration:none}
+.rg-nav-link:hover{color:var(--cream)}
+.rg-nav-cta{font-family:var(--sans);font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--cream);background:none;border:1px solid var(--line-strong);border-radius:999px;padding:9px 18px;cursor:pointer;transition:background .2s,border-color .2s}
+.rg-nav-cta:hover{background:rgba(184,199,164,.1);border-color:var(--sage)}
 
-/* Type */
-.rf-eyebrow{
-  font-family:'Inter',sans-serif;
-  font-size:11px;
-  letter-spacing:.28em;
-  text-transform:uppercase;
-  color:var(--rf-stone);
-  margin-bottom:28px;
-  font-weight:500;
-}
-.rf-eyebrow-moss{color:#9bac86}
+/* type */
+.rg-eyebrow{font-family:var(--sans);font-size:11px;letter-spacing:.28em;text-transform:uppercase;color:var(--sage);margin-bottom:26px;font-weight:500;display:block}
+.rg-eyebrow-dark{color:#3d5a32}
+.rg-eyebrow-moss{color:#9bac86}
+.rg-h1{font-family:var(--serif);font-weight:400;font-size:clamp(44px,7vw,86px);line-height:1.02;letter-spacing:-.01em;margin:0 0 26px}
+.rg-h2{font-family:var(--serif);font-weight:400;font-size:clamp(30px,4vw,52px);line-height:1.06;margin:0 0 24px}
+.rg-h2-dark{color:#10261a}
+.rg-h2 em{font-style:italic;color:var(--sage-deep)}
+.rg-h2-dark em{color:#3d5a32}
+.rg-lede{font-family:var(--serif);font-weight:300;font-size:clamp(20px,2.2vw,26px);line-height:1.5;color:var(--cream);margin:0 0 36px;max-width:560px}
+.rg-body{font-family:var(--serif);font-size:clamp(18px,2vw,21px);line-height:1.7;color:rgba(243,237,224,.82);max-width:60ch}
+.rg-body-bright{color:var(--cream)}
+.rg-strong{color:var(--cream);font-weight:500}
+.rg-link{color:var(--sage);text-decoration:underline;text-decoration-color:rgba(184,199,164,.4);text-underline-offset:3px}
+.rg-link:hover{text-decoration-color:var(--sage)}
 
-.rf-h1{
-  font-family:'Fraunces','Times New Roman',serif;
-  font-weight:400;
-  font-size:clamp(38px,6vw,68px);
-  line-height:1.05;
-  letter-spacing:-.01em;
-  margin:0 0 28px;
-}
-.rf-lede{
-  font-family:'Fraunces',serif;
-  font-weight:300;
-  font-size:clamp(19px,2.2vw,24px);
-  line-height:1.55;
-  color:var(--rf-linen);
-  margin:0 0 40px;
-  max-width:560px;
-}
-.rf-body{
-  font-size:17px;
-  line-height:1.75;
-  color:rgba(237,230,218,0.78);
-  max-width:60ch;
-}
-.rf-lede-strong{
-  color:var(--rf-linen);
-  font-weight:500;
-}
+/* skim path — warm gold on dark, deep green on cream */
+.rg-skim{color:var(--gold);font-weight:500;text-shadow:0 0 18px rgba(230,196,137,.2)}
+.rg-h1 .rg-skim{text-shadow:0 0 34px rgba(230,196,137,.28)}
 
-/* SKIM path — the ember spans */
-.rf-skim{
-  color:var(--rf-ember);
-  font-weight:500;
-  text-shadow:0 0 18px rgba(232,160,76,0.18);
-}
-.rf-h1 .rf-skim{
-  text-shadow:0 0 32px rgba(232,160,76,0.25);
-}
+/* cream section */
+.rg-light{background:var(--cream);color:#1f2e23}
+.rg-light .rg-body{color:#23332a;font-weight:500}
+.rg-light .rg-skim{color:#2d4a25;font-weight:600;text-shadow:none}
+.rg-light .rg-link{color:#3d5a32;text-decoration-color:rgba(61,90,50,.4)}
 
-.rf-link{
-  color:var(--rf-ember-soft);
-  text-decoration:underline;
-  text-decoration-color:rgba(232,160,76,0.4);
-  text-underline-offset:3px;
-}
-.rf-link:hover{text-decoration-color:var(--rf-ember)}
+/* moss section */
+.rg-moss{background:linear-gradient(180deg,var(--bg) 0%,rgba(107,117,89,.10) 50%,var(--bg) 100%)}
 
-/* Hero */
-.rf-hero{
-  min-height:88vh;
-  display:flex;
-  align-items:center;
-  padding-top:120px;
-  padding-bottom:120px;
-  overflow:hidden;
+/* buttons (sage pill, like old) */
+.rg-cta-col{display:flex;flex-direction:column;gap:14px;align-items:flex-start;margin-top:8px}
+.rg-btn{
+  display:inline-flex;align-items:center;gap:12px;
+  background:var(--sage);color:#0e1c12;
+  font-family:var(--sans);font-weight:600;font-size:13px;letter-spacing:.14em;text-transform:uppercase;
+  padding:16px 34px;border-radius:999px;border:none;cursor:pointer;
+  transition:transform .15s,background .2s,box-shadow .25s;
+  box-shadow:0 14px 40px -16px rgba(184,199,164,.6);
 }
-.rf-hero-inner{position:relative;z-index:1}
-.rf-door-light{
-  position:absolute;
-  top:-10%;
-  bottom:-10%;
-  right:18%;
-  width:42px;
-  background:linear-gradient(180deg, transparent 0%, var(--rf-ember) 50%, transparent 100%);
-  opacity:0.10;
-  filter:blur(28px);
-  pointer-events:none;
-  z-index:0;
-}
+.rg-btn:hover:not(:disabled){background:#cbd9b7;transform:translateY(-1px)}
+.rg-btn:disabled{opacity:.7;cursor:wait}
+.rg-btn-full{width:100%;justify-content:center;margin-top:30px}
+.rg-arrow{display:inline-block;transition:transform .25s}
+.rg-btn:hover .rg-arrow{transform:translateX(4px)}
+.rg-scarcity{font-family:var(--sans);font-size:12px;letter-spacing:.04em;color:var(--cream-dim);margin:6px 0 0}
+.rg-scarcity-center{margin-top:18px}
 
-/* Door dividers — light through a door opening a little more each time */
-.rf-door-divider{
-  margin:32px auto;
-  background:linear-gradient(180deg, transparent, var(--rf-ember), transparent);
-  border-radius:2px;
-}
+/* hero */
+.rg-hero{padding:150px 24px 110px}
+.rg-hero-grid{max-width:1180px;margin:0 auto;display:grid;grid-template-columns:1fr;gap:44px;align-items:center}
+.rg-hero-copy{order:2}
+.rg-portrait{order:1;position:relative;margin:0;border-radius:8px;overflow:hidden;aspect-ratio:4/5;background:#0e1a14;box-shadow:0 70px 90px -50px rgba(0,0,0,.8),0 0 0 1px var(--line)}
+.rg-portrait img{width:100%;height:100%;object-fit:cover;object-position:center 18%;display:block}
+.rg-portrait-vig{position:absolute;inset:0;pointer-events:none;background:linear-gradient(180deg,transparent 50%,rgba(10,22,16,.7) 100%)}
+.rg-portrait-cap{position:absolute;left:22px;bottom:18px;font-family:var(--sans);font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--cream);opacity:.9}
 
-/* CTA */
-.rf-cta-row{
-  margin-top:36px;
-  display:flex;
-  flex-direction:column;
-  gap:12px;
-  align-items:flex-start;
-}
-.rf-cta-center{align-items:center}
-.rf-btn{
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  background:var(--rf-ember);
-  color:#1a0f00;
-  font-family:'Inter',sans-serif;
-  font-weight:600;
-  font-size:15px;
-  letter-spacing:.02em;
-  padding:16px 30px;
-  border-radius:8px;
-  border:none;
-  cursor:pointer;
-  transition:transform .15s ease, background .15s ease, box-shadow .25s ease;
-  box-shadow:0 8px 32px -8px rgba(232,160,76,0.4);
-  text-decoration:none;
-  text-align:center;
-}
-.rf-btn:hover{
-  background:var(--rf-ember-soft);
-  transform:translateY(-1px);
-  box-shadow:0 14px 40px -10px rgba(232,160,76,0.55);
-}
-.rf-btn:focus-visible{
-  outline:2px solid var(--rf-ember);
-  outline-offset:3px;
-}
-.rf-btn:disabled{opacity:.6;cursor:wait;transform:none}
+/* timeline split */
+.rg-split{max-width:1080px;margin:0 auto;display:grid;grid-template-columns:1fr;gap:48px;align-items:center}
+.rg-split-figure{position:relative;margin:0;border-radius:8px;overflow:hidden;aspect-ratio:4/5;background:#0e1a14;box-shadow:0 60px 80px -50px rgba(0,0,0,.8),0 0 0 1px var(--line)}
+.rg-split-figure img{width:100%;height:100%;object-fit:cover;display:block}
 
-/* Scarcity */
-.rf-scarcity{
-  margin-top:16px;
-  font-size:13px;
-  color:var(--rf-stone);
-  letter-spacing:.04em;
-}
-.rf-scarcity-center{text-align:center}
+/* brain */
+.rg-brain-grid{max-width:1080px;margin:0 auto;display:grid;grid-template-columns:1fr;gap:40px;align-items:center}
+.rg-brain-figure{margin:0;display:flex;flex-direction:column;align-items:center;gap:18px}
+.rg-brain-svg{width:min(320px,80%);height:auto}
+.rg-brain-legend{display:flex;flex-direction:column;gap:8px;font-family:var(--sans);font-size:12px;letter-spacing:.04em;color:#3a4a3e}
+.rg-brain-legend span{display:flex;align-items:center;gap:9px}
+.rg-dot-amy,.rg-dot-hip{width:9px;height:9px;border-radius:50%;display:inline-block}
+.rg-dot-amy{background:#c69a6d}
+.rg-dot-hip{background:#5f7a4f}
+.rg-cite{display:flex;flex-wrap:wrap;gap:18px;margin-top:8px;font-family:var(--sans);font-size:12px;letter-spacing:.02em}
 
-/* Stack */
-.rf-stack{
-  margin:24px 0 40px;
-  display:flex;
-  flex-direction:column;
-  gap:0;
-}
-.rf-stack-item{
-  padding:28px 0;
-  border-top:1px solid var(--rf-line);
-}
-.rf-stack-item:last-child{border-bottom:1px solid var(--rf-line)}
-.rf-stack-head{
-  display:flex;
-  justify-content:space-between;
-  gap:24px;
-  align-items:baseline;
-  margin-bottom:10px;
-}
-.rf-stack-name{
-  font-family:'Inter',sans-serif;
-  font-size:13px;
-  letter-spacing:.18em;
-  text-transform:uppercase;
-  color:var(--rf-linen);
-  font-weight:600;
-}
-.rf-stack-tag{
-  font-family:'Fraunces',serif;
-  font-weight:300;
-  font-style:italic;
-  font-size:15px;
-  color:var(--rf-stone);
-  margin-top:4px;
-}
-.rf-stack-price{
-  font-family:'Fraunces',serif;
-  font-weight:300;
-  font-size:20px;
-  color:var(--rf-ember-soft);
-  white-space:nowrap;
-}
-.rf-stack-desc{
-  font-size:16px;
-  line-height:1.7;
-  color:rgba(237,230,218,0.72);
-  margin:0;
-  max-width:58ch;
-}
-.rf-yours{
-  margin-top:32px;
-  font-size:14px;
-  letter-spacing:.06em;
-  color:var(--rf-stone);
-}
+/* stack */
+.rg-stack-intro{color:var(--cream);font-weight:500;margin-bottom:6px}
+.rg-stack{margin:22px 0 36px}
+.rg-stack-item{padding:26px 0;border-top:1px solid var(--line)}
+.rg-stack-item:last-child{border-bottom:1px solid var(--line)}
+.rg-stack-head{display:flex;justify-content:space-between;gap:20px;align-items:baseline;margin-bottom:10px}
+.rg-stack-name{font-family:var(--sans);font-size:13px;letter-spacing:.16em;text-transform:uppercase;color:var(--cream);font-weight:600}
+.rg-stack-tag{font-family:var(--serif);font-style:italic;font-size:16px;color:var(--cream-dim);margin-top:4px}
+.rg-stack-price{font-family:var(--serif);font-size:22px;color:var(--sage);white-space:nowrap}
+.rg-stack-desc{font-family:var(--serif);font-size:17px;line-height:1.65;color:rgba(243,237,224,.74);margin:0;max-width:58ch}
+.rg-yours{margin-top:30px;font-family:var(--sans);font-size:13px;letter-spacing:.04em;color:var(--cream-dim)}
+.rg-total{margin-top:22px;padding:34px 0 0;border-top:1px solid var(--line)}
+.rg-total-line{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;margin-bottom:8px}
+.rg-total-strike{font-family:var(--serif);font-size:20px;color:var(--cream-dim);text-decoration:line-through;text-decoration-color:rgba(198,154,109,.7)}
+.rg-total-arrow{color:var(--cream-dim)}
+.rg-total-now{font-family:var(--serif);font-size:28px}
+.rg-total-sub{font-family:var(--serif);font-size:15px;color:var(--cream-dim);margin:0 0 4px}
+.rg-foot-line{margin-top:16px;text-align:center;font-family:var(--sans);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--cream-dim)}
 
-/* Total + price reveal */
-.rf-total{
-  margin-top:24px;
-  padding:36px 0 0;
-  border-top:1px solid var(--rf-line);
-}
-.rf-total-line{
-  display:flex;
-  align-items:baseline;
-  gap:14px;
-  flex-wrap:wrap;
-  margin-bottom:8px;
-}
-.rf-total-strike{
-  font-family:'Fraunces',serif;
-  font-size:18px;
-  color:var(--rf-stone);
-  text-decoration:line-through;
-}
-.rf-total-arrow{color:var(--rf-stone);font-size:14px}
-.rf-total-price{
-  font-family:'Fraunces',serif;
-  font-weight:400;
-  font-size:26px;
-}
-.rf-total-sub{
-  font-size:14px;
-  color:var(--rf-stone);
-  margin:0 0 28px;
-}
+/* guarantee */
+.rg-quiet-block{margin-top:34px;padding:22px 0 0;border-top:1px solid var(--line)}
+.rg-quiet{font-family:var(--serif);font-size:16px;color:var(--cream-dim);line-height:1.7;margin:0;max-width:58ch}
 
-/* Guarantee — moss */
-.rf-moss{
-  background:linear-gradient(180deg,
-    var(--rf-night) 0%,
-    rgba(107,117,89,0.06) 50%,
-    var(--rf-night) 100%);
-}
-.rf-quiet-block{
-  margin-top:36px;
-  padding:24px 0 0;
-  border-top:1px solid var(--rf-line);
-}
-.rf-quiet{
-  font-size:15px;
-  color:var(--rf-stone);
-  line-height:1.7;
-  margin:0;
-  max-width:58ch;
-}
+/* faq */
+.rg-faq{margin-top:6px;border-top:1px solid var(--line)}
+.rg-faq-item{border-bottom:1px solid var(--line)}
+.rg-faq-q{width:100%;display:flex;justify-content:space-between;align-items:center;gap:16px;padding:22px 0;background:none;border:none;color:var(--cream);font-family:var(--serif);font-size:20px;text-align:left;cursor:pointer;transition:color .15s}
+.rg-faq-q:hover{color:var(--sage)}
+.rg-faq-plus{font-family:var(--sans);font-size:22px;color:var(--cream-dim);width:20px;text-align:center}
+.rg-faq-a{padding:0 0 24px;font-family:var(--serif);font-size:17px;color:rgba(243,237,224,.74);line-height:1.7;margin:0;max-width:58ch}
 
-/* FAQ */
-.rf-faq{
-  margin-top:8px;
-  border-top:1px solid var(--rf-line);
-}
-.rf-faq-item{
-  border-bottom:1px solid var(--rf-line);
-}
-.rf-faq-q{
-  width:100%;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:16px;
-  padding:22px 0;
-  background:transparent;
-  border:none;
-  color:var(--rf-linen);
-  font-family:'Fraunces',serif;
-  font-size:18px;
-  text-align:left;
-  cursor:pointer;
-  transition:color .15s;
-}
-.rf-faq-q:hover{color:var(--rf-ember-soft)}
-.rf-faq-q:focus-visible{outline:2px solid var(--rf-ember);outline-offset:4px}
-.rf-faq-plus{
-  font-family:'Inter',sans-serif;
-  font-size:22px;
-  color:var(--rf-stone);
-  font-weight:300;
-  width:20px;
-  text-align:center;
-}
-.rf-faq-a{
-  padding:0 0 24px;
-  font-size:16px;
-  color:rgba(237,230,218,0.72);
-  line-height:1.7;
-  margin:0;
-  max-width:58ch;
-}
+/* final */
+.rg-final{text-align:center;padding-top:130px;padding-bottom:140px;position:relative;overflow:hidden}
+.rg-final::before{content:"";position:absolute;inset:0;background:radial-gradient(ellipse 60% 80% at 50% 55%,rgba(184,199,164,.10),transparent 65%);pointer-events:none}
+.rg-final-inner{position:relative}
+.rg-final-body{font-family:var(--serif);font-weight:300;font-size:clamp(20px,2.4vw,26px);color:var(--cream);max-width:520px;margin:0 auto 1.3em}
+.rg-final-line{font-size:clamp(28px,4vw,42px);font-weight:400;margin-top:1em;margin-bottom:1.4em}
 
-/* Final close — door fully open */
-.rf-final{
-  padding-top:140px;
-  padding-bottom:140px;
-  text-align:center;
-  position:relative;
-  overflow:hidden;
-}
-.rf-final-glow{
-  position:absolute;
-  inset:0;
-  background:radial-gradient(ellipse 60% 80% at 50% 60%, rgba(232,160,76,0.14), transparent 65%);
-  pointer-events:none;
-}
-.rf-final-inner{position:relative;z-index:1}
-.rf-final-body{
-  margin:0 auto 1.4em;
-  font-family:'Fraunces',serif;
-  font-weight:300;
-  font-size:clamp(19px,2.2vw,24px);
-  color:var(--rf-linen);
-  max-width:520px;
-}
-.rf-final-line{
-  font-size:clamp(24px,3.4vw,36px);
-  font-weight:400;
-  margin-top:1.2em;
-}
+/* footer */
+.rg-footer{background:var(--bg-deep);border-top:1px solid var(--line);padding:48px 24px;font-family:var(--sans);font-size:12px;color:var(--cream-dim)}
+.rg-foot-inner{max-width:1080px;margin:0 auto;display:flex;flex-wrap:wrap;align-items:center;gap:18px}
+.rg-foot-link{color:var(--cream-dim);text-decoration:none}
+.rg-foot-link:hover{color:var(--cream)}
+.rg-foot-fine{flex-basis:100%;margin-top:8px;font-size:11px;opacity:.75}
 
-/* Waitlist (prelaunch) */
-.rf-waitlist{
-  display:flex;
-  flex-direction:column;
-  gap:14px;
-  max-width:520px;
-  width:100%;
+/* desktop */
+@media (min-width:840px){
+  .rg-sec{padding:130px 32px}
+  .rg-hero{padding:170px 32px 130px}
+  .rg-hero-grid{grid-template-columns:1.1fr .9fr;gap:72px}
+  .rg-hero-copy{order:1}
+  .rg-portrait{order:2;max-height:80vh}
+  .rg-split{grid-template-columns:1.15fr .85fr;gap:64px}
+  .rg-brain-grid{grid-template-columns:1fr 1fr;gap:60px}
+  .rg-brain-svg{width:100%}
 }
-.rf-waitlist-heading{
-  margin:0 0 4px;
-  font-family:'Fraunces',serif;
-  font-size:17px;
-  font-style:italic;
-  color:var(--rf-linen);
-}
-.rf-waitlist-row{
-  display:flex;
-  flex-direction:column;
-  gap:10px;
-}
-.rf-input{
-  background:var(--rf-card);
-  border:1px solid var(--rf-line);
-  border-radius:8px;
-  padding:14px 16px;
-  font-family:'Inter',sans-serif;
-  font-size:15px;
-  color:var(--rf-linen);
-  width:100%;
-  transition:border-color .15s;
-}
-.rf-input::placeholder{color:var(--rf-stone)}
-.rf-input:focus{
-  outline:none;
-  border-color:var(--rf-ember);
-  background:rgba(237,230,218,0.06);
-}
-.rf-btn-wait{width:100%}
-.rf-waitlist-thanks{
-  font-family:'Fraunces',serif;
-  font-style:italic;
-  font-size:18px;
-  color:var(--rf-ember-soft);
-  margin:0;
-}
-.rf-waitlist-err{
-  margin:0;
-  font-size:13px;
-  color:#c98a6f;
-}
-
-/* Footer */
-.rf-footer{
-  padding:48px 24px;
-  border-top:1px solid var(--rf-line);
-  font-size:12px;
-  color:var(--rf-stone);
-}
-.rf-footer-inner{
-  display:flex;
-  flex-wrap:wrap;
-  align-items:center;
-  gap:18px;
-}
-.rf-footer-link{
-  color:var(--rf-stone);
-  text-decoration:none;
-  transition:color .15s;
-}
-.rf-footer-link:hover{color:var(--rf-linen)}
-.rf-footer-fine{
-  flex-basis:100%;
-  margin-top:8px;
-  font-size:11px;
-  opacity:0.7;
-}
-
-/* Larger screens */
-@media (min-width: 720px){
-  .rf-section{padding:120px 32px}
-  .rf-hero{padding-top:160px;padding-bottom:160px}
-  .rf-waitlist-row{flex-direction:row;gap:8px}
-  .rf-input{flex:1}
-  .rf-btn-wait{width:auto;white-space:nowrap}
-  .rf-door-light{right:24%;width:60px}
-}
-
-/* Respect prefers-reduced-motion */
-@media (prefers-reduced-motion: reduce){
-  .rf-btn{transition:none}
-  .rf-btn:hover{transform:none}
+@media (prefers-reduced-motion:reduce){
+  .rg-btn{transition:none}
+  .rg-btn:hover{transform:none}
+  .rg-brain-svg animate{display:none}
 }
 `;

@@ -134,7 +134,7 @@ export default function LandingPage() {
           <a className="lp-nav-link" href="#teacher" onClick={scrollTo("teacher")}>Teacher</a>
           <a className="lp-nav-link" href="#voices" onClick={scrollTo("voices")}>Voices</a>
           <a className="lp-nav-signin" href="/signin">Sign in</a>
-          <button className="lp-nav-cta" onClick={scrollTo("pricing")}>Begin · $29</button>
+          <button className="lp-nav-cta" onClick={scrollTo("pricing")}>Begin</button>
         </div>
       </nav>
 
@@ -149,8 +149,8 @@ export default function LandingPage() {
               <em style={{ fontStyle: "italic" }}>even when life won&apos;t stop</em>. No experience needed.
             </p>
             <div className="lp-hero-cta-row">
-              <button className="lp-btn-primary" onClick={scrollTo("pricing")}>Begin for $29 <span className="lp-arrow">→</span></button>
-              <div className="lp-guarantee">$29 one-time <span>·</span> Lifetime access <span>·</span> 30-day refund</div>
+              <button className="lp-btn-primary" onClick={scrollTo("pricing")}>Begin — <span className="lp-was">$79</span> $49 <span className="lp-arrow">→</span></button>
+              <div className="lp-guarantee">Founding price <span>·</span> Lifetime access <span>·</span> 30-day refund</div>
               <a href="/signin" className="lp-hero-signin">Already have access? Sign in →</a>
             </div>
           </div>
@@ -307,7 +307,7 @@ export default function LandingPage() {
             ["03", <>Three <em>&ldquo;hard day&rdquo;</em> meditations</>, "For the mornings after no sleep, the moment before the meeting, the long ride home."],
             ["04", <>Lifetime <em>access</em>, any device</>, "Web, mobile, offline downloads. No subscription. No ads. No notifications."],
             ["05", <>Two ambient <em>soundscapes</em></>, "Bonus tracks — temple rain, and a single bowl rung over forty minutes."],
-            ["06", <>A quiet <em>guarantee</em></>, "Try it for thirty days. If it doesn't soften something, we'll return your $29 without a single question."],
+            ["06", <>A quiet <em>guarantee</em></>, "Try it for thirty days. If it doesn't soften something, we'll return your $49 without a single question."],
           ].map(([num, title, desc]) => (
             <div key={num as string} className="lp-inc-item reveal">
               <div className="lp-inc-num">{num}</div>
@@ -365,19 +365,20 @@ export default function LandingPage() {
           </h2>
           <div className="lp-price-card">
             <div className="lp-price-top">
-              <div className="lp-price-name">Slowing Down</div>
+              <div className="lp-price-name">The whole path</div>
             </div>
             <div className="lp-price-amount">
-              <div className="lp-price-big">$29</div>
-              <div className="lp-price-once">One-time<br />lifetime access</div>
+              <div className="lp-price-big">$49</div>
+              <div className="lp-price-strike">$79</div>
+              <div className="lp-price-once">Founding price<br />lifetime access</div>
             </div>
             <ul className="lp-price-list">
-              {["21 guided audio sessions", "3 \"hard day\" meditations + 2 soundscapes", "Printable journey companion", "Web, iOS, Android — offline ready", "30-day, no-questions refund"].map(item => <li key={item}>{item}</li>)}
+              {["21 guided sessions — the full path", "3 \"hard day\" meditations + 2 soundscapes", "Printable journey companion", "Sessions for life after Day 21", "Web, iOS, Android — offline ready", "30-day, no-questions refund"].map(item => <li key={item}>{item}</li>)}
             </ul>
             <button className="lp-btn-primary lp-btn-full" onClick={handleBuy} disabled={buying}>
-              {buying ? "Opening checkout…" : <>{`Begin for $29`} <span className="lp-arrow">→</span></>}
+              {buying ? "Opening checkout…" : <>Begin for <span className="lp-was">$79</span> $49 <span className="lp-arrow">→</span></>}
             </button>
-            <div className="lp-price-foot">Secure checkout <span>·</span> Apple Pay <span>·</span> No subscription</div>
+            <div className="lp-price-foot">Less than a single therapy session <span>·</span> No subscription</div>
           </div>
         </div>
       </section>
@@ -394,7 +395,7 @@ export default function LandingPage() {
               ["What if I miss a day?", "You miss a day. There are no streaks, no nudges, no guilt notifications. The sessions are yours for life — you can return tomorrow, or next month. The practice waits."],
               ["Is this religious?", "No. Monk Samarn is a Buddhist monk by ordination, but Slowing Down is a secular practice. There is no chanting, no doctrine, no asking you to believe anything. Just attention and breath."],
               ["How is this different from Calm or Headspace?", "Those are libraries. This is a single, deliberate path. One voice, twenty-one days, in order. You pay once. We will never send you a push notification or ask you to upgrade."],
-              ["Refund policy?", "Thirty days from purchase. Email us one line — \"it wasn't for me\" — and your $29 is returned the same day, no questions, no exit survey."],
+              ["Refund policy?", "Thirty days from purchase. Email us one line — \"it wasn't for me\" — and your $49 is returned the same day, no questions, no exit survey."],
               ["Does it work offline?", "Yes. The app caches each session on first play, so you can practice on a plane, in a forest, in any place without a signal. Which, ideally, is the point."],
             ].map(([q, a]) => (
               <div key={q} className="lp-faq-item">
@@ -418,7 +419,7 @@ export default function LandingPage() {
           </p>
           <div style={{ marginTop: 48 }}>
             <button className="lp-btn-primary" onClick={handleBuy} disabled={buying}>
-              {buying ? "Opening checkout…" : <>{`Begin for $29`} <span className="lp-arrow">→</span></>}
+              {buying ? "Opening checkout…" : <>Begin for <span className="lp-was">$79</span> $49 <span className="lp-arrow">→</span></>}
             </button>
           </div>
           <div className="lp-guarantee" style={{ marginTop: 18 }}>Lifetime access <span>·</span> 30-day refund <span>·</span> No subscription</div>
@@ -470,6 +471,7 @@ body{background:var(--lp-bg)}
 .lp-btn-primary:hover:not(:disabled){background:#cbd9b7;transform:translateY(-1px)}.lp-btn-primary:disabled{opacity:.7;cursor:default}
 .lp-btn-full{width:100%;justify-content:center;margin-top:32px}
 .lp-arrow{display:inline-block;transition:transform .25s}.lp-btn-primary:hover .lp-arrow{transform:translateX(4px)}
+.lp-was{text-decoration:line-through;opacity:.45;font-weight:400;margin:0 5px 0 2px}
 .lp-guarantee{font-family:'Inter',-apple-system,sans-serif;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--lp-cream-dim);line-height:1.8;text-align:center}
 .lp-guarantee span{opacity:.5;margin:0 .4em}
 .lp-hero{min-height:100vh;padding:140px 32px 120px;position:relative;overflow:hidden;isolation:isolate;display:flex;align-items:center}

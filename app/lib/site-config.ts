@@ -1,6 +1,6 @@
 // Single source of truth for launch state.
 // Change SITE_STATE to "live" the day the door opens.
-export const SITE_STATE: "prelaunch" | "live" = "prelaunch";
+export const SITE_STATE: "prelaunch" | "live" = "live";
 
 // Where the Begin Day 1 buttons send people when SITE_STATE === "live".
 // Defaults to the existing Stripe checkout API.
