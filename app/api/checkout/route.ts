@@ -1,9 +1,15 @@
 import { NextResponse } from "next/server";
 import Stripe from "stripe";
+import { doorOpen } from "@/app/lib/site-config";
 
 export async function POST() {
   const secretKey = process.env.STRIPE_SECRET_KEY;
-  const priceId = process.env.STRIPE_PRICE_ID;
+
+  // Founding price while the door is open, regular price after it closes.
+  // STRIPE_PRICE_ID = founding ($49). STRIPE_PRICE_ID_REGULAR = regular ($79).
+  const foundingPrice = process.env.STRIPE_PRICE_ID;
+  const regularPrice = process.env.STRIPE_PRICE_ID_REGULAR;
+  const priceId = doorOpen() ? foundingPrice : regularPrice || foundingPrice;
 
   if (!secretKey || !priceId) {
     return NextResponse.json(
