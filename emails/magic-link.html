@@ -1,0 +1,77 @@
+<!--
+  THE REFUGE — Magic Link email
+  Paste this into Supabase → Authentication → Email Templates → "Magic Link".
+  Subject line (set in the field above the body):
+      Your door to The Refuge is open
+  Supabase fills {{ .ConfirmationURL }} with the one-time sign-in link.
+-->
+<table width="100%" cellpadding="0" cellspacing="0" role="presentation" style="margin:0;padding:0;background:#07100b;">
+  <tr>
+    <td align="center" style="padding:40px 16px;">
+      <table width="100%" cellpadding="0" cellspacing="0" role="presentation" style="max-width:480px;width:100%;">
+
+        <!-- Brand -->
+        <tr>
+          <td align="center" style="padding:8px 0 28px;">
+            <span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#b8c7a4;vertical-align:middle;"></span>
+            <span style="font-family:Georgia,'Times New Roman',serif;font-style:italic;font-size:20px;color:#f3ede0;vertical-align:middle;margin-left:8px;letter-spacing:.02em;">Refuge</span>
+          </td>
+        </tr>
+
+        <!-- Card -->
+        <tr>
+          <td style="background:#0c1812;border:1px solid rgba(243,237,224,0.12);border-radius:14px;padding:44px 40px;">
+
+            <p style="margin:0 0 18px;font-family:Arial,Helvetica,sans-serif;font-size:11px;letter-spacing:.26em;text-transform:uppercase;color:#b8c7a4;">
+              Your place is ready
+            </p>
+
+            <h1 style="margin:0 0 20px;font-family:Georgia,'Times New Roman',serif;font-weight:400;font-size:34px;line-height:1.2;color:#f3ede0;">
+              Step inside.
+            </h1>
+
+            <p style="margin:0 0 14px;font-family:Georgia,'Times New Roman',serif;font-size:17px;line-height:1.7;color:#cfc8b8;">
+              Welcome to <em>Slowing Down</em> — your 21-day path with Monk Samarn.
+              Tap below and the door opens. No password to remember; this link
+              logs you straight into your course.
+            </p>
+
+            <!-- Button -->
+            <table cellpadding="0" cellspacing="0" role="presentation" style="margin:32px 0 8px;">
+              <tr>
+                <td align="center" bgcolor="#b8c7a4" style="border-radius:999px;">
+                  <a href="{{ .ConfirmationURL }}"
+                     style="display:inline-block;padding:16px 40px;font-family:Arial,Helvetica,sans-serif;font-size:13px;font-weight:bold;letter-spacing:.14em;text-transform:uppercase;color:#0e1c12;text-decoration:none;border-radius:999px;">
+                    Open my course &nbsp;&rarr;
+                  </a>
+                </td>
+              </tr>
+            </table>
+
+            <p style="margin:24px 0 0;font-family:Arial,Helvetica,sans-serif;font-size:12px;line-height:1.7;color:#8a8178;">
+              This link opens once and expires in an hour. If the button
+              doesn&rsquo;t work, copy and paste this address into your browser:
+            </p>
+            <p style="margin:8px 0 0;font-family:Arial,Helvetica,sans-serif;font-size:12px;line-height:1.6;word-break:break-all;color:#7d9070;">
+              {{ .ConfirmationURL }}
+            </p>
+
+          </td>
+        </tr>
+
+        <!-- Footer -->
+        <tr>
+          <td align="center" style="padding:28px 8px 0;">
+            <p style="margin:0 0 6px;font-family:Georgia,'Times New Roman',serif;font-style:italic;font-size:14px;color:#8a8178;">
+              A quiet place to come back to, in a world that won&rsquo;t let you stop.
+            </p>
+            <p style="margin:0;font-family:Arial,Helvetica,sans-serif;font-size:11px;letter-spacing:.06em;color:#5f6a5a;">
+              The Refuge &middot; therefuge.app &middot; If you didn&rsquo;t request this, you can ignore it.
+            </p>
+          </td>
+        </tr>
+
+      </table>
+    </td>
+  </tr>
+</table>
