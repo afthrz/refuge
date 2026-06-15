@@ -75,6 +75,7 @@ export async function grantAccess(
     const { error: purchaseError } = await supabase.from("purchases").upsert(
       {
         user_id: userId,
+        email: email.toLowerCase().trim(),
         course_id: "slowing-down",
         stripe_session_id: sessionId,
       },

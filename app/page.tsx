@@ -21,7 +21,7 @@ export default function Home() {
         const { data: purchase } = await supabase
           .from("purchases")
           .select("id")
-          .eq("user_id", user.id)
+          .limit(1)
           .maybeSingle();
         if (purchase) {
           router.replace("/course/slowing-down");

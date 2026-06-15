@@ -54,10 +54,12 @@ export default function CoursePage({
       }
       setSignedIn(true);
 
+      // RLS returns a row if it matches this user's id OR their email, so
+      // access works via email magic link or Google sign-in alike.
       const { data: purchase } = await supabase
         .from("purchases")
         .select("id")
-        .eq("user_id", user.id)
+        .limit(1)
         .maybeSingle();
 
       if (!purchase) {
