@@ -3,7 +3,7 @@
 import { FormEvent, useState } from "react";
 import { useRouter } from "next/navigation";
 import RefugeWash from "@/app/components/RefugeWash";
-import { createClient, hasSupabaseConfig } from "@/app/lib/supabase";
+import { createOtpClient, hasSupabaseConfig } from "@/app/lib/supabase";
 
 export default function SuccessPage() {
   const router = useRouter();
@@ -19,7 +19,7 @@ export default function SuccessPage() {
     setError(null);
 
     try {
-      const supabase = createClient();
+      const supabase = createOtpClient();
       const { error } = await supabase.auth.signInWithOtp({
         email,
         options: { emailRedirectTo: `${window.location.origin}/auth/callback?next=/course/slowing-down` },

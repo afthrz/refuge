@@ -3,7 +3,7 @@
 import { FormEvent, Suspense, useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import RefugeWash from "@/app/components/RefugeWash";
-import { createClient, hasSupabaseConfig } from "@/app/lib/supabase";
+import { createClient, createOtpClient, hasSupabaseConfig } from "@/app/lib/supabase";
 
 function getErrorMessage(code: string | null) {
   if (code === "auth_config") {
@@ -44,11 +44,11 @@ function SignInContent() {
     setErrorMsg(null);
 
     try {
-      const supabase = createClient();
+      const supabase = createOtpClient();
       const { error } = await supabase.auth.signInWithOtp({
         email,
         options: {
-          emailRedirectTo: `${window.location.origin}/auth/callback`,
+          emailRedirectTo: `${window.location.origin}/auth/callback?next=/course/slowing-down`,
         },
       });
 
