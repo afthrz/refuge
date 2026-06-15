@@ -3,7 +3,8 @@
   Paste this into Supabase → Authentication → Email Templates → "Magic Link".
   Subject line (set in the field above the body):
       Your door to The Refuge is open
-  Supabase fills {{ .ConfirmationURL }} with the one-time sign-in link.
+  Uses the token-hash flow so the link works on ANY device/app, not just
+  the browser that requested it. Supabase fills in .SiteURL and .TokenHash.
 -->
 <table width="100%" cellpadding="0" cellspacing="0" role="presentation" style="margin:0;padding:0;background:#07100b;">
   <tr>
@@ -40,7 +41,7 @@
             <table cellpadding="0" cellspacing="0" role="presentation" style="margin:32px 0 8px;">
               <tr>
                 <td align="center" bgcolor="#b8c7a4" style="border-radius:999px;">
-                  <a href="{{ .ConfirmationURL }}"
+                  <a href="{{ .SiteURL }}/auth/callback?token_hash={{ .TokenHash }}&type=magiclink&next=/course/slowing-down"
                      style="display:inline-block;padding:16px 40px;font-family:Arial,Helvetica,sans-serif;font-size:13px;font-weight:bold;letter-spacing:.14em;text-transform:uppercase;color:#0e1c12;text-decoration:none;border-radius:999px;">
                     Open my course &nbsp;&rarr;
                   </a>
@@ -53,7 +54,7 @@
               doesn&rsquo;t work, copy and paste this address into your browser:
             </p>
             <p style="margin:8px 0 0;font-family:Arial,Helvetica,sans-serif;font-size:12px;line-height:1.6;word-break:break-all;color:#7d9070;">
-              {{ .ConfirmationURL }}
+              {{ .SiteURL }}/auth/callback?token_hash={{ .TokenHash }}&type=magiclink&next=/course/slowing-down
             </p>
 
           </td>
