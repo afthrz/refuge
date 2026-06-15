@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { createServerClient } from "@supabase/ssr";
-import type { EmailOtpType } from "@supabase/supabase-js";
 
 function getSafeNext(searchParams: URLSearchParams) {
   const next = searchParams.get("next");
@@ -13,12 +12,25 @@ export async function GET(request: NextRequest) {
   const { searchParams, origin } = new URL(request.url);
   const code = searchParams.get("code");
   const tokenHash = searchParams.get("token_hash");
-  const type = searchParams.get("type") as EmailOtpType | null;
+  const type = searchParams.get("type");
 
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
-  if ((code || tokenHash) && supabaseUrl && supabaseAnonKey) {
+  // Email magic links: do NOT verify here. A plain GET (from an iOS/Gmail
+  // link scanner) would burn the single-use token before the user taps it.
+  // Hand off to the client page, which verifies in JS — scanners don't run
+  // JS, so the token survives until a real browser opens it.
+  if (tokenHash && !code) {
+    const url = new URL(`${origin}/auth/confirm`);
+    url.searchParams.set("token_hash", tokenHash);
+    if (type) url.searchParams.set("type", type);
+    url.searchParams.set("next", getSafeNext(searchParams));
+    return NextResponse.redirect(url.toString());
+  }
+
+  // PKCE / OAuth flow (Google) — verify server-side; needs the same browser.
+  if (code && supabaseUrl && supabaseAnonKey) {
     const response = NextResponse.redirect(
       `${origin}${getSafeNext(searchParams)}`
     );
@@ -36,30 +48,8 @@ export async function GET(request: NextRequest) {
       },
     });
 
-    // PKCE / OAuth flow (Google) — needs the same browser that started it.
-    if (code) {
-      const { error } = await supabase.auth.exchangeCodeForSession(code);
-      if (!error) return response;
-    }
-
-    // Token-hash flow (email magic links) — works on ANY device or app,
-    // because it carries no browser-bound verifier. Try the type from the
-    // URL, then the common email types as a fallback.
-    if (tokenHash) {
-      const candidates = [type, "magiclink", "email", "signup"].filter(
-        Boolean
-      ) as EmailOtpType[];
-      const seen = new Set<string>();
-      for (const t of candidates) {
-        if (seen.has(t)) continue;
-        seen.add(t);
-        const { error } = await supabase.auth.verifyOtp({
-          type: t,
-          token_hash: tokenHash,
-        });
-        if (!error) return response;
-      }
-    }
+    const { error } = await supabase.auth.exchangeCodeForSession(code);
+    if (!error) return response;
   }
 
   return NextResponse.redirect(`${origin}/signin?error=auth_failed`);
