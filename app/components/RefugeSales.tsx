@@ -418,10 +418,12 @@ export default function RefugeSales() {
               chair, your breath, and a voice that knows the way back.
             </p>
             <p className="rg-final-body rg-final-line">The door is open.</p>
-            <button className="rg-btn" onClick={handleBuy} disabled={buying}>
-              {buying ? "Opening checkout…" : "Begin Day 1"}{" "}
-              {!buying && <span className="rg-arrow">→</span>}
-            </button>
+            <div className="rg-final-cta">
+              <button className="rg-btn" onClick={handleBuy} disabled={buying}>
+                {buying ? "Opening checkout…" : "Begin Day 1"}{" "}
+                {!buying && <span className="rg-arrow">→</span>}
+              </button>
+            </div>
             {SITE_STATE === "live" && open && (
               <p className="rg-scarcity rg-scarcity-center">
                 <span className="rg-skim">The door closes {closes}.</span>
@@ -712,6 +714,7 @@ const CSS = `
 .rg-final-inner{position:relative}
 .rg-final-body{font-family:var(--serif);font-weight:300;font-size:clamp(20px,2.4vw,26px);color:var(--cream);max-width:520px;margin:0 auto 1.3em}
 .rg-final-line{font-size:clamp(28px,4vw,42px);font-weight:400;margin-top:1em;margin-bottom:1.4em}
+.rg-final-cta{display:flex;justify-content:center;width:100%}
 
 .rg-footer{background:var(--bg-deep);border-top:1px solid var(--line);padding:48px 24px;font-family:var(--sans);font-size:12px;color:var(--cream-dim)}
 .rg-foot-inner{max-width:1080px;margin:0 auto;display:flex;flex-wrap:wrap;align-items:center;gap:18px}
