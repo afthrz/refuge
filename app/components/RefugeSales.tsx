@@ -712,7 +712,7 @@ const CSS = `
 .rg-final{text-align:center;padding-top:130px;padding-bottom:140px;position:relative;overflow:hidden}
 .rg-final::before{content:"";position:absolute;inset:0;background:radial-gradient(ellipse 60% 80% at 50% 55%,rgba(184,199,164,.10),transparent 65%);pointer-events:none}
 .rg-final-inner{position:relative}
-.rg-final-body{font-family:var(--serif);font-weight:300;font-size:clamp(20px,2.4vw,26px);color:var(--cream);max-width:520px;margin:0 auto 1.3em}
+.rg-final .rg-final-body{font-family:var(--serif);font-weight:300;font-size:clamp(20px,2.4vw,26px);color:var(--cream);max-width:520px;margin-left:auto;margin-right:auto;margin-bottom:1.3em}
 .rg-final-line{font-size:clamp(28px,4vw,42px);font-weight:400;margin-top:1em;margin-bottom:1.4em}
 .rg-final-cta{display:flex;justify-content:center;width:100%}
 
