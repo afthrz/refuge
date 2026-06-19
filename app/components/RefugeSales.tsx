@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import {
   SITE_STATE,
@@ -20,10 +20,31 @@ export default function RefugeSales() {
   const [buying, setBuying] = useState(false);
   const [openFaq, setOpenFaq] = useState<number | null>(0);
   const [stackOpen, setStackOpen] = useState(false);
+  const [showFloat, setShowFloat] = useState(false);
 
   const open = doorOpen();
   const price = currentPrice();
   const closes = closesLabel();
+
+  // Floating CTA: visible while scrolling, hidden whenever a real "begin"
+  // button (hero, pricing, or final) is on screen — so it never doubles up.
+  useEffect(() => {
+    const ctas = document.querySelectorAll("[data-cta]");
+    if (!ctas.length) return;
+    const visible = new Set<Element>();
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) {
+          if (e.isIntersecting) visible.add(e.target);
+          else visible.delete(e.target);
+        }
+        setShowFloat(visible.size === 0);
+      },
+      { threshold: 0 }
+    );
+    ctas.forEach((el) => io.observe(el));
+    return () => io.disconnect();
+  }, []);
 
   async function handleBuy() {
     setBuying(true);
@@ -79,7 +100,7 @@ export default function RefugeSales() {
                 needed — if your mind wanders, you&apos;re doing it right.
               </p>
               <div className="rg-cta-col">
-                <button className="rg-btn" onClick={goStack} disabled={buying}>
+                <button className="rg-btn" onClick={goStack} disabled={buying} data-cta>
                   Begin Day 1 <span className="rg-arrow">→</span>
                 </button>
                 {SITE_STATE === "live" && (
@@ -333,6 +354,7 @@ export default function RefugeSales() {
                 className="rg-btn rg-btn-full"
                 onClick={handleBuy}
                 disabled={buying}
+                data-cta
               >
                 {buying ? (
                   "Opening checkout…"
@@ -419,7 +441,7 @@ export default function RefugeSales() {
             </p>
             <p className="rg-final-body rg-final-line">The door is open.</p>
             <div className="rg-final-cta">
-              <button className="rg-btn" onClick={handleBuy} disabled={buying}>
+              <button className="rg-btn" onClick={handleBuy} disabled={buying} data-cta>
                 {buying ? "Opening checkout…" : "Begin Day 1"}{" "}
                 {!buying && <span className="rg-arrow">→</span>}
               </button>
@@ -448,6 +470,19 @@ export default function RefugeSales() {
             </span>
           </div>
         </footer>
+
+        {/* Floating CTA — follows the scroll, hides when a real button shows */}
+        <button
+          className={`rg-float ${showFloat ? "show" : ""}`}
+          onClick={handleBuy}
+          disabled={buying}
+          aria-hidden={!showFloat}
+          tabIndex={showFloat ? 0 : -1}
+        >
+          {buying ? "Opening checkout…" : (
+            <>Begin Day 1 — ${price} <span className="rg-arrow">→</span></>
+          )}
+        </button>
       </div>
     </>
   );
@@ -715,6 +750,13 @@ const CSS = `
 .rg-final .rg-final-body{font-family:var(--serif);font-weight:300;font-size:clamp(20px,2.4vw,26px);color:var(--cream);max-width:520px;margin-left:auto;margin-right:auto;margin-bottom:1.3em}
 .rg-final-line{font-size:clamp(28px,4vw,42px);font-weight:400;margin-top:1em;margin-bottom:1.4em}
 .rg-final-cta{display:flex;justify-content:center;width:100%}
+
+/* Floating CTA */
+.rg-float{position:fixed;left:50%;bottom:22px;z-index:60;display:inline-flex;align-items:center;gap:10px;background:var(--sage);color:#0e1c12;font-family:var(--sans);font-weight:600;font-size:13px;letter-spacing:.12em;text-transform:uppercase;padding:15px 30px;border-radius:999px;border:none;cursor:pointer;white-space:nowrap;box-shadow:0 18px 46px -14px rgba(0,0,0,.65),0 0 0 1px rgba(184,199,164,.35);transform:translateX(-50%) translateY(140%);opacity:0;pointer-events:none;transition:transform .35s cubic-bezier(.2,.8,.2,1),opacity .25s ease,background .2s}
+.rg-float.show{transform:translateX(-50%) translateY(0);opacity:1;pointer-events:auto}
+.rg-float:hover{background:#cbd9b7}
+.rg-float:disabled{opacity:.7;cursor:wait}
+@media(max-width:420px){.rg-float{font-size:12px;padding:14px 22px;letter-spacing:.08em}}
 
 .rg-footer{background:var(--bg-deep);border-top:1px solid var(--line);padding:48px 24px;font-family:var(--sans);font-size:12px;color:var(--cream-dim)}
 .rg-foot-inner{max-width:1080px;margin:0 auto;display:flex;flex-wrap:wrap;align-items:center;gap:18px}
