@@ -480,7 +480,7 @@ export default function RefugeSales() {
           tabIndex={showFloat ? 0 : -1}
         >
           {buying ? "Opening checkout…" : (
-            <>Begin Day 1 — ${price} <span className="rg-arrow">→</span></>
+            <>Begin Day 1 <span className="rg-arrow">→</span></>
           )}
         </button>
       </div>
